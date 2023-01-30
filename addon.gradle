@@ -1,0 +1,5 @@
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'com.mordenkainen.equivalentenergistics.asm.EqECoreLoader',
+                   'FMLCorePluginContainsFMLMod': 'true'    }
+}
