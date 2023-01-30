@@ -14,9 +14,12 @@ import net.minecraftforge.common.config.Configuration;
 
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
 import com.mordenkainen.equivalentenergistics.blocks.base.block.BlockMultiContainerBase;
+import com.mordenkainen.equivalentenergistics.blocks.base.block.ILayeredBlock;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenserAdv;
+import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenserBase;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenserExt;
+import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenserExt.SideSetting;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenserUlt;
 import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
 import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
@@ -25,7 +28,7 @@ import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfigurable {
+public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfigurable, ILayeredBlock {
 
     private static final String GROUP = "Condenser";
     public static double emcPerTick;
@@ -36,12 +39,16 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
         super(Material.rock, 4);
         setHardness(1.5f);
         setStepSound(Block.soundTypeStone);
-        setLightOpacity(1);
     }
 
     @Override
-    public boolean isOpaqueCube() {
-        return false;
+    public int getRenderBlockPass() {
+        return 1;
+    }
+
+    @Override
+    public boolean canRenderInPass(final int pass) {
+        return pass == 1;
     }
 
     @Override
@@ -51,7 +58,7 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
 
     @Override
     public int getRenderType() {
-        return EquivalentEnergistics.proxy.condenserRenderer;
+        return EquivalentEnergistics.proxy.layeredRenderer;
     }
 
     @Override
@@ -71,7 +78,7 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(final int side, final int meta) {
-        return TextureEnum.EMCCONDENSER.getTexture();
+        return TextureEnum.EMCCONDENSER.getTexture(meta);
     }
 
     @Override
@@ -124,6 +131,44 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
     @Override
     public boolean canConnectRedstone(final IBlockAccess world, final int x, final int y, final int z, final int side) {
         return world.getBlockMetadata(x, y, z) != 0;
+    }
+
+    @Override
+    public int numLayers(final Block block, final int meta) {
+        return 0;
+    }
+
+    @Override
+    public int numLayers(final IBlockAccess world, final Block block, final int x, final int y, final int z,
+            final int meta) {
+        return 2;
+    }
+
+    @Override
+    public IIcon getLayer(final Block block, final int side, final int meta, final int layer) {
+        return null;
+    }
+
+    @Override
+    public IIcon getLayer(final IBlockAccess world, final Block block, final int x, final int y, final int z,
+            final int side, final int meta, final int layer) {
+        final TileEMCCondenserBase tileCondenser = CommonUtils.getTE(TileEMCCondenserBase.class, world, x, y, z);
+        if (tileCondenser != null) {
+            if (layer == 1) {
+                if (tileCondenser.getState().isError()) {
+                    return TextureEnum.EMCCONDENSEROVL.getTexture(3);
+                } else if (tileCondenser.isActive()) {
+                    return TextureEnum.EMCCONDENSEROVL.getTexture(2);
+                }
+            } else if (tileCondenser instanceof TileEMCCondenserExt) {
+                if (((TileEMCCondenserExt) tileCondenser).getSide(side) == SideSetting.INPUT) {
+                    return TextureEnum.EMCCONDENSEROVL.getTexture();
+                } else if (((TileEMCCondenserExt) tileCondenser).getSide(side) == SideSetting.OUTPUT) {
+                    return TextureEnum.EMCCONDENSEROVL.getTexture(1);
+                }
+            }
+        }
+        return null;
     }
 
     @Override

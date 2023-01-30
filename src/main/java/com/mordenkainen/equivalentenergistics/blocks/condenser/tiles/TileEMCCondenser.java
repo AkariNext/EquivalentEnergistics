@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import appeng.api.config.Actionable;
+import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.TickRateModulation;
 
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
@@ -48,16 +49,32 @@ public class TileEMCCondenser extends TileEMCCondenserBase implements IWailaNBTP
     }
 
     @Override
-    protected TickRateModulation tickingRequest() {
-        if (isActive() && currentEMC > 0) {
-            CondenserState newState = state;
-            newState = injectExcessEMC();
-            if (updateState(newState)) {
-                return TickRateModulation.IDLE;
-            }
+    public TickRateModulation tickingRequest(final IGridNode node, final int ticksSinceLast) {
+        if (refreshNetworkState()) {
+            markForUpdate();
         }
 
-        return null;
+        if (isActive()) {
+            CondenserState newState = state;
+
+            if (currentEMC > 0) {
+                newState = injectExcessEMC();
+                if (updateState(newState)) {
+                    return TickRateModulation.IDLE;
+                }
+            }
+
+            if (getInventory().isEmpty()) {
+                updateState(CondenserState.IDLE);
+            } else {
+                newState = processInv();
+                updateState(newState);
+            }
+        } else {
+            updateState(CondenserState.IDLE);
+        }
+
+        return state.getTickRate();
     }
 
     private CondenserState injectExcessEMC() {

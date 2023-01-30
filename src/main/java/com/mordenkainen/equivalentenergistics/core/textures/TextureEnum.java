@@ -7,7 +7,9 @@ import com.mordenkainen.equivalentenergistics.core.Reference;
 
 public enum TextureEnum {
 
-    EMCCONDENSER(TextureType.BLOCK, "EMCCondenserLights", "EMCCondenserError"),
+    EMCCONDENSER(TextureType.BLOCK, "EMCCondenser", "EMCCondenserAdv", "EMCCondenserExt", "EMCCondenserUlt"),
+    EMCCONDENSEROVL(TextureType.BLOCK, "EMCCondenserInput", "EMCCondenserOutput", "EMCCondenserLights",
+            "EMCCondenserError"),
     EMCBOOK(TextureType.ITEM, "EMCBook"),
     EMCCRYSTAL(TextureType.ITEM, "EMCNugget", "EMCShard", "EMCCrystal", "DenseEMCCrystal", "SuperDenseEMCCrystal"),
     EMCCRYSTALOLD(TextureType.ITEM, "EMCCrystal"),
@@ -18,8 +20,7 @@ public enum TextureEnum {
     EMCSTORAGECOMPONENT(TextureType.ITEM, "EMCStorageComponent0", "EMCStorageComponent1", "EMCStorageComponent2",
             "EMCStorageComponent3", "EMCStorageComponent4", "EMCStorageComponent5", "EMCStorageComponent6",
             "EMCStorageComponent7"),
-    EMCASSEMBLER(TextureType.BLOCK, "EMCAssemblerLights", "EMCAssemblerError"),
-    EMCPROVIDER(TextureType.BLOCK, "EMCProviderLights");
+    EMCASSEMBLER(TextureType.BLOCK, "EMCAssemblerLights", "EMCAssemblerError");
 
     private enum TextureType {
 

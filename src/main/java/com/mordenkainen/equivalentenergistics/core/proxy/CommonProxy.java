@@ -11,7 +11,6 @@ import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafte
 import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterAdv;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterExt;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterUlt;
-import com.mordenkainen.equivalentenergistics.blocks.provider.tile.TileEMCPatternProvider;
 import com.mordenkainen.equivalentenergistics.core.Reference;
 import com.mordenkainen.equivalentenergistics.core.TickHandler;
 import com.mordenkainen.equivalentenergistics.core.crafting.CraftingManager;
@@ -25,8 +24,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class CommonProxy {
 
     public int crafterRenderer;
-    public int condenserRenderer;
-    public int providerRenderer;
+    public int layeredRenderer;
 
     public void preInit() {
         Integration.preInit();
@@ -70,9 +68,6 @@ public class CommonProxy {
             GameRegistry.registerTileEntity(TileEMCCrafterAdv.class, Reference.MOD_ID + "TileEMCCrafterAdv");
             GameRegistry.registerTileEntity(TileEMCCrafterExt.class, Reference.MOD_ID + "TileEMCCrafterExt");
             GameRegistry.registerTileEntity(TileEMCCrafterUlt.class, Reference.MOD_ID + "TileEMCCrafterUlt");
-        }
-        if (BlockEnum.EMCPROVIDER.isEnabled()) {
-            GameRegistry.registerTileEntity(TileEMCPatternProvider.class, Reference.MOD_ID + "TileEMCProvider");
         }
     }
 

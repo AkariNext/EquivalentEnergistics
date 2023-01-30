@@ -10,7 +10,6 @@ import com.google.common.base.Predicates;
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.BlockEMCCrafter;
-import com.mordenkainen.equivalentenergistics.blocks.provider.BlockEMCPatternProvider;
 import com.mordenkainen.equivalentenergistics.core.Reference;
 import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
@@ -28,12 +27,7 @@ public enum BlockEnum {
             Predicates.and(
                     Integration.Mods.AE2.getTest(),
                     Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())),
-            "EMCCrafter", false),
-    EMCPROVIDER("EMCProvider", new BlockEMCPatternProvider(), ItemBlock.class,
-            Predicates.and(
-                    Integration.Mods.AE2.getTest(),
-                    Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())),
-            "EMCProvider", false);
+            "EMCCrafter", false);
 
     private final String internalName;
 

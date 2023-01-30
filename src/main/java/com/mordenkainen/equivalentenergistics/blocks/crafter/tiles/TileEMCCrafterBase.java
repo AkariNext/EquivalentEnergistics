@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +13,9 @@ import net.minecraft.world.World;
 import appeng.api.config.Actionable;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
+import appeng.api.networking.crafting.ICraftingPatternDetails;
+import appeng.api.networking.crafting.ICraftingProvider;
+import appeng.api.networking.crafting.ICraftingProviderHelper;
 import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
@@ -19,7 +23,7 @@ import appeng.api.networking.ticking.TickingRequest;
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.BlockEMCCrafter;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
-import com.mordenkainen.equivalentenergistics.integration.ae2.cache.crafting.IEMCCrafter;
+import com.mordenkainen.equivalentenergistics.integration.ae2.EMCCraftingPattern;
 import com.mordenkainen.equivalentenergistics.integration.ae2.cache.crafting.ITransProvider;
 import com.mordenkainen.equivalentenergistics.integration.ae2.grid.GridUtils;
 import com.mordenkainen.equivalentenergistics.integration.ae2.tiles.TileAEBase;
@@ -27,7 +31,7 @@ import com.mordenkainen.equivalentenergistics.integration.waila.IWailaNBTProvide
 import com.mordenkainen.equivalentenergistics.util.IDropItems;
 
 public abstract class TileEMCCrafterBase extends TileAEBase
-        implements IEMCCrafter, IGridTickable, IWailaNBTProvider, IDropItems, ICraftingMonitor, ITransProvider {
+        implements ICraftingProvider, IGridTickable, IWailaNBTProvider, IDropItems, ICraftingMonitor, ITransProvider {
 
     private static final String TOME_TAG = "Tome";
     private static final String OWNER_TAG = "Owner";
@@ -120,9 +124,14 @@ public abstract class TileEMCCrafterBase extends TileAEBase
     }
 
     @Override
-    public boolean addJob(final ItemStack stack, final double inputCost, final double outputCost) {
-        if (isActive() && manager.addJob(stack, outputCost, BlockEMCCrafter.powerPerEMC)) {
-            currentEMC += inputCost - outputCost;
+    public boolean pushPattern(final ICraftingPatternDetails patternDetails, final InventoryCrafting table) {
+        if (isActive() && patternDetails instanceof EMCCraftingPattern
+                && manager.addJob(
+                        patternDetails.getOutputs()[0].getItemStack(),
+                        ((EMCCraftingPattern) patternDetails).outputEMC,
+                        BlockEMCCrafter.powerPerEMC)) {
+            currentEMC += ((EMCCraftingPattern) patternDetails).inputEMC
+                    - ((EMCCraftingPattern) patternDetails).outputEMC;
             displayStacks = manager.getCurrentJobs();
             markForUpdate();
             return true;
@@ -133,6 +142,11 @@ public abstract class TileEMCCrafterBase extends TileAEBase
     @Override
     public boolean isBusy() {
         return manager.isBusy();
+    }
+
+    @Override
+    public void provideCrafting(final ICraftingProviderHelper craftingTracker) {
+        GridUtils.addPatterns(getProxy(), this, craftingTracker);
     }
 
     public ItemStack getCurrentTome() {

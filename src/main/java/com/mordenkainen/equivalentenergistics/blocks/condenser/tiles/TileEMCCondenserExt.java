@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.TickRateModulation;
 
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
@@ -52,7 +53,11 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
     }
 
     @Override
-    protected TickRateModulation tickingRequest() {
+    public TickRateModulation tickingRequest(final IGridNode node, final int ticksSinceLast) {
+        if (refreshNetworkState()) {
+            markForUpdate();
+        }
+
         if (isActive()) {
             if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
                 updateState(CondenserState.IDLE);
@@ -62,7 +67,7 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
             importItems();
         }
 
-        return null;
+        return super.tickingRequest(node, ticksSinceLast);
     }
 
     protected void importItems() {

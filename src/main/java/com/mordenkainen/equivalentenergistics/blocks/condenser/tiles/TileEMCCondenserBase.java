@@ -1,8 +1,5 @@
 package com.mordenkainen.equivalentenergistics.blocks.condenser.tiles;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -30,7 +27,6 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
     private final static String STATE_TAG = "state";
 
     protected CondenserState state = CondenserState.IDLE;
-    private int updateCounter = 19;
 
     public TileEMCCondenserBase(final ItemStack repItem) {
         super(repItem);
@@ -43,10 +39,6 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
     protected void getPacketData(final NBTTagCompound nbttagcompound) {
         super.getPacketData(nbttagcompound);
         nbttagcompound.setInteger(STATE_TAG, state.ordinal());
-        if (updateCounter >= 20) {
-            updateCounter = 0;
-            internalInventory.saveToNBT(nbttagcompound, INVENTORY_TAG);
-        }
     }
 
     @Override
@@ -55,10 +47,6 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
         final CondenserState newState = CondenserState.values()[nbttagcompound.getInteger(STATE_TAG)];
         if (newState != state) {
             state = newState;
-            flag = true;
-        }
-        if (nbttagcompound.hasKey(INVENTORY_TAG)) {
-            internalInventory.loadFromNBT(nbttagcompound, INVENTORY_TAG);
             flag = true;
         }
         return flag;
@@ -71,14 +59,8 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
 
     @Override
     public TickRateModulation tickingRequest(final IGridNode node, final int ticksSinceLast) {
-        updateCounter++;
-        if (refreshNetworkState() || updateCounter == 20) {
+        if (refreshNetworkState()) {
             markForUpdate();
-        }
-
-        final TickRateModulation result = tickingRequest();
-        if (result != null) {
-            return result;
         }
 
         CondenserState newState = state;
@@ -92,8 +74,6 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
 
         return state.getTickRate();
     }
-
-    protected abstract TickRateModulation tickingRequest();
 
     protected abstract double getEMCPerTick();
 
@@ -242,13 +222,5 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
                     && Integration.emcHandler.getSingleEnergyValue(itemStack) <= getEMCPerTick();
         }
 
-    }
-
-    public List<ItemStack> getDisplayStacks() {
-        final List<ItemStack> stacks = new ArrayList<ItemStack>();
-        for (int i = 0; i < internalInventory.getSizeInventory(); i++) {
-            stacks.add(internalInventory.getStackInSlot(i));
-        }
-        return stacks;
     }
 }

@@ -33,7 +33,6 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
     private final IGrid grid;
     private final Map<Equivalence.Wrapper<ItemStack>, EMCCraftingPattern> patterns = new HashMap<Equivalence.Wrapper<ItemStack>, EMCCraftingPattern>();
     private final Map<ITransProvider, String> patternProviders = new WeakHashMap<ITransProvider, String>();
-    private final Map<IEMCCrafter, Boolean> crafters = new WeakHashMap<IEMCCrafter, Boolean>();
     private int lastPatternVer = -1;
 
     public EMCCraftingGrid(final IGrid grid) {
@@ -57,9 +56,6 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
                 lastPatternVer = -1;
             }
         }
-        if (machine instanceof IEMCCrafter) {
-            crafters.remove((IEMCCrafter) machine);
-        }
     }
 
     @Override
@@ -70,9 +66,6 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
                 lastPatternVer = -1;
             }
         }
-        if (machine instanceof IEMCCrafter) {
-            crafters.put((IEMCCrafter) machine, true);
-        }
     }
 
     @Override
@@ -80,6 +73,7 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
         patterns.clear();
         addCrystalPatterns();
         for (final ITransProvider provider : patternProviders.keySet()) {
+            patternProviders.put(provider, provider.getPlayerUUID());
             for (final ItemStack stack : provider.getTransmutations()) {
                 addPattern(stack);
             }
@@ -114,27 +108,6 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
     @Override
     public EMCCraftingPattern[] getPatterns() {
         return patterns.isEmpty() ? new EMCCraftingPattern[0] : patterns.values().toArray(new EMCCraftingPattern[0]);
-    }
-
-    @Override
-    public boolean allCraftersBusy() {
-        for (final IEMCCrafter crafter : crafters.keySet()) {
-            if (!crafter.isBusy()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean addJob(final ItemStack stack, final double inputCost, final double outputCost) {
-        for (final IEMCCrafter crafter : crafters.keySet()) {
-            if (!crafter.isBusy() && crafter.addJob(stack, inputCost, outputCost)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static void energyEvent() {
@@ -195,5 +168,4 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
             }
         }
     }
-
 }
