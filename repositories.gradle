@@ -9,10 +9,31 @@ repositories {
         name 'CB Repo'
         url "http://chickenbones.net/maven/"
     }
-    ivy {
-        name 'ProjectE'
-        ivyPattern "https://maven.tterrag.com/[module]-[revision].[ext]"
-        artifactPattern "http://media.forgecdn.net/files/${pe_cf}/[module]-[revision].[ext]"
+    maven {
+        name 'forge Repo'
+        url "https://maven.minecraftforge.net"
+    }
+    maven {
+        name 'GTNH Maven'
+        url 'http://jenkins.usrv.eu:8081/nexus/content/groups/public/'
+        allowInsecureProtocol
+    }
+    maven {
+        name 'mightypirates'
+        url 'https://maven.cil.li/'
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+    }
+    maven {
+        url 'https://cursemaven.com'
+        content {
+            includeGroup 'curse.maven'
+        }
+    }
+    maven {
+        url 'https://jitpack.io'
     }
     maven {url "https://nexus.teamblackcrystal.com/repository/maven-public/"}
 }

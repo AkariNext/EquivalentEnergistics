@@ -1,5 +1,9 @@
 package com.mordenkainen.equivalentenergistics.core.proxy;
 
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.base.render.BlockWithTileRenderer;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.renderer.TileEMCCondenserRenderer;
@@ -14,9 +18,6 @@ import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy {
 

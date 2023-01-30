@@ -3,9 +3,10 @@ package com.mordenkainen.equivalentenergistics.integration.ae2.grid;
 import java.util.Collections;
 import java.util.EnumSet;
 
-import com.mordenkainen.equivalentenergistics.blocks.base.tile.EqETileBase;
-import com.mordenkainen.equivalentenergistics.core.TickHandler;
-import com.mordenkainen.equivalentenergistics.util.CommonUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import appeng.api.AEApi;
 import appeng.api.networking.GridFlags;
@@ -17,11 +18,11 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.events.MENetworkPowerIdleChange;
 import appeng.api.util.AEColor;
 import appeng.api.util.DimensionalCoord;
+
+import com.mordenkainen.equivalentenergistics.blocks.base.tile.EqETileBase;
+import com.mordenkainen.equivalentenergistics.core.TickHandler;
+import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class AEProxy implements IGridBlock {
 
@@ -37,7 +38,7 @@ public class AEProxy implements IGridBlock {
     private NBTTagCompound data;
     private boolean ready;
     private EntityPlayer owner;
-    
+
     public AEProxy(final IAEProxyHost proxy, final String name, final ItemStack displayStack, final boolean inWorld) {
         this.proxy = proxy;
         nbtName = name;
@@ -45,12 +46,12 @@ public class AEProxy implements IGridBlock {
         this.displayStack = displayStack;
         validSides = EnumSet.allOf(ForgeDirection.class);
     }
-    
+
     @Override
     public double getIdlePowerUsage() {
         return idleDraw;
     }
-    
+
     public void setIdlePowerUsage(final double idle) {
         idleDraw = idle;
 
@@ -67,7 +68,7 @@ public class AEProxy implements IGridBlock {
     public EnumSet<GridFlags> getFlags() {
         return flags;
     }
-    
+
     public void setFlags(final GridFlags... gridFlags) {
         final EnumSet<GridFlags> newFlags = EnumSet.noneOf(GridFlags.class);
 
@@ -90,14 +91,14 @@ public class AEProxy implements IGridBlock {
     public AEColor getGridColor() {
         return gridColor;
     }
-    
+
     public void setColor(final AEColor newColor) {
         gridColor = newColor;
     }
 
     @Override
     public void onGridNotification(final GridNotification notification) {}
-    
+
     @Override
     public void setNetworkStatus(final IGrid grid, final int channelsInUse) {}
 
@@ -105,7 +106,7 @@ public class AEProxy implements IGridBlock {
     public EnumSet<ForgeDirection> getConnectableSides() {
         return validSides;
     }
-    
+
     public void setConnectableSides(final EnumSet<ForgeDirection> validSides) {
         this.validSides = validSides;
         if (node != null) {
@@ -127,11 +128,11 @@ public class AEProxy implements IGridBlock {
     public ItemStack getMachineRepresentation() {
         return displayStack;
     }
-    
+
     public void setMachineRepresentation(final ItemStack stack) {
         displayStack = stack;
     }
-    
+
     public IGrid getGrid() throws GridAccessException {
         if (node != null) {
             final IGrid grid = node.getGrid();
@@ -152,7 +153,7 @@ public class AEProxy implements IGridBlock {
         }
         return node;
     }
-    
+
     public void invalidate() {
         ready = false;
         if (node != null) {
@@ -160,16 +161,16 @@ public class AEProxy implements IGridBlock {
             node = null;
         }
     }
-    
+
     public void onReady() {
         ready = true;
         getNode();
     }
-    
+
     public boolean isActive() {
         return node != null && node.isActive();
     }
-    
+
     public boolean isPowered() {
         try {
             return GridUtils.getEnergy(this).isNetworkPowered();
@@ -178,26 +179,26 @@ public class AEProxy implements IGridBlock {
             return false;
         }
     }
-    
+
     public boolean isReady() {
         return ready;
     }
-    
+
     public void onChunkUnload() {
         invalidate();
     }
-    
+
     public void readFromNBT(final NBTTagCompound tag) {
         data = tag;
-        if(node != null && data != null) { // NOPMD
+        if (node != null && data != null) { // NOPMD
             node.loadFromNBT(nbtName, data);
             data = null;
-        } else if(node != null && owner != null) {
+        } else if (node != null && owner != null) {
             node.setPlayerID(AEApi.instance().registries().players().getID(owner));
             owner = null;
         }
     }
-    
+
     public void setOwner(final EntityPlayer player) {
         owner = player;
     }
@@ -207,13 +208,13 @@ public class AEProxy implements IGridBlock {
             TickHandler.INSTANCE.addInit((EqETileBase) proxy);
         }
     }
-    
+
     public void writeToNBT(final NBTTagCompound tag) {
         if (node != null) {
             node.saveToNBT(nbtName, tag);
         }
     }
-    
+
     public boolean meetsChannelRequirements() {
         if (node == null) {
             return false;

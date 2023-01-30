@@ -3,11 +3,11 @@ package com.mordenkainen.equivalentenergistics.core.config;
 
 import java.io.File;
 
+import net.minecraftforge.common.config.Configuration;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
 import com.mordenkainen.equivalentenergistics.items.ItemEnum;
-
-import net.minecraftforge.common.config.Configuration;
 
 public final class ConfigManager {
 
@@ -35,7 +35,7 @@ public final class ConfigManager {
         useEE3 = config.get("General", "UseEE3", useEE3).getBoolean(useEE3);
 
         debug = config.get("General", "Debug", debug).getBoolean(false);
-        
+
         maxStackEMC = config.get("General", "MaxEMCForAStack", maxStackEMC).getDouble(maxStackEMC);
 
         if (config.hasChanged()) {

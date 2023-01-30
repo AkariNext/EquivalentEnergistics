@@ -1,28 +1,40 @@
 package com.mordenkainen.equivalentenergistics.blocks;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
-import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
-import com.mordenkainen.equivalentenergistics.blocks.provider.BlockEMCPatternProvider;
-import com.mordenkainen.equivalentenergistics.blocks.crafter.BlockEMCCrafter;
-import com.mordenkainen.equivalentenergistics.core.Reference;
-import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
-import com.mordenkainen.equivalentenergistics.integration.Integration;
-import com.mordenkainen.equivalentenergistics.items.itemblocks.ItemBlockMulti;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
+import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
+import com.mordenkainen.equivalentenergistics.blocks.crafter.BlockEMCCrafter;
+import com.mordenkainen.equivalentenergistics.blocks.provider.BlockEMCPatternProvider;
+import com.mordenkainen.equivalentenergistics.core.Reference;
+import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
+import com.mordenkainen.equivalentenergistics.integration.Integration;
+import com.mordenkainen.equivalentenergistics.items.itemblocks.ItemBlockMulti;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public enum BlockEnum {
 
-    EMCCONDENSER("EMCCondenser", new BlockEMCCondenser(), ItemBlockMulti.class, Predicates.and(Integration.Mods.AE2.getTest(), Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())), "EMCCondenser", false),
-    EMCCRAFTER("EMCCrafter", new BlockEMCCrafter(), ItemBlockMulti.class, Predicates.and(Integration.Mods.AE2.getTest(), Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())), "EMCCrafter", false),
-    EMCPROVIDER("EMCProvider", new BlockEMCPatternProvider(), ItemBlock.class, Predicates.and(Integration.Mods.AE2.getTest(), Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())), "EMCProvider", false);
-    
+    EMCCONDENSER("EMCCondenser", new BlockEMCCondenser(), ItemBlockMulti.class,
+            Predicates.and(
+                    Integration.Mods.AE2.getTest(),
+                    Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())),
+            "EMCCondenser", false),
+    EMCCRAFTER("EMCCrafter", new BlockEMCCrafter(), ItemBlockMulti.class,
+            Predicates.and(
+                    Integration.Mods.AE2.getTest(),
+                    Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())),
+            "EMCCrafter", false),
+    EMCPROVIDER("EMCProvider", new BlockEMCPatternProvider(), ItemBlock.class,
+            Predicates.and(
+                    Integration.Mods.AE2.getTest(),
+                    Predicates.or(Integration.Mods.EE3.getTest(), Integration.Mods.PROJECTE.getTest())),
+            "EMCProvider", false);
+
     private final String internalName;
 
     private Block block;
@@ -65,7 +77,8 @@ public enum BlockEnum {
         this(internalName, block, ItemBlock.class, Predicates.alwaysTrue(), configKey, hidden);
     }
 
-    BlockEnum(final String internalName, final Block block, final Class<? extends ItemBlock> itemBlockClass, final Predicate<?> requirements, final String configKey, final boolean hidden) {
+    BlockEnum(final String internalName, final Block block, final Class<? extends ItemBlock> itemBlockClass,
+            final Predicate<?> requirements, final String configKey, final boolean hidden) {
         this.internalName = internalName;
         this.block = block;
         this.block.setBlockName(Reference.MOD_ID + ":" + internalName);

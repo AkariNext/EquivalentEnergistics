@@ -2,24 +2,8 @@ package com.mordenkainen.equivalentenergistics.items;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
-import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
-import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
-import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
-import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
-import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCell;
-import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCellBase;
-import com.mordenkainen.equivalentenergistics.util.CommonUtils;
-
-import appeng.api.storage.IMEInventory;
-import appeng.api.storage.IMEInventoryHandler;
-import appeng.api.storage.ISaveProvider;
-import appeng.api.storage.StorageChannel;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import moze_intel.projecte.api.item.IItemEmc;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
@@ -29,13 +13,33 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
+import org.lwjgl.input.Keyboard;
+
+import appeng.api.storage.IMEInventory;
+import appeng.api.storage.IMEInventoryHandler;
+import appeng.api.storage.ISaveProvider;
+import appeng.api.storage.StorageChannel;
+
+import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
+import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
+import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
+import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
+import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCell;
+import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCellBase;
+import com.mordenkainen.equivalentenergistics.util.CommonUtils;
+
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @Optional.Interface(iface = "moze_intel.projecte.api.item.IItemEmc", modid = "ProjectE")
 public class ItemEMCCell extends ItemEMCCellBase implements IConfigurable, IItemEmc {
 
     private static final String GROUP = "Storage Cells";
     private static final String EMC_TAG = "emc";
 
-    private static final double[] CAPACITIES = { 1000000, 4000000, 16000000, 64000000, 256000000, 1024000000, 4096000000f, 16384000000f };
+    private static final double[] CAPACITIES = { 1000000, 4000000, 16000000, 64000000, 256000000, 1024000000,
+            4096000000f, 16384000000f };
     private static final double[] DRAIN = { 0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8 };
 
     public ItemEMCCell() {
@@ -56,19 +60,28 @@ public class ItemEMCCell extends ItemEMCCellBase implements IConfigurable, IItem
     @SuppressWarnings({ "unchecked", "rawtypes" }) // NOPMD
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean param4) {
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list,
+            final boolean param4) {
         final double curEMC = getStoredCellEMC(stack);
         final String tooltip = StatCollector.translateToLocal("tooltip.emc.name") + " ";
         if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            list.add(tooltip + String.format("%.2f", curEMC) + " / " + String.format("%.2f", CAPACITIES[stack.getItemDamage()]));
+            list.add(
+                    tooltip + String.format("%.2f", curEMC)
+                            + " / "
+                            + String.format("%.2f", CAPACITIES[stack.getItemDamage()]));
         } else {
-            list.add(tooltip + CommonUtils.formatEMC(curEMC) + " / " + CommonUtils.formatEMC(CAPACITIES[stack.getItemDamage()]));
+            list.add(
+                    tooltip + CommonUtils.formatEMC(curEMC)
+                            + " / "
+                            + CommonUtils.formatEMC(CAPACITIES[stack.getItemDamage()]));
         }
     }
 
     @Override
     public ItemStack onItemRightClick(final ItemStack stack, final World world, final EntityPlayer player) {
-        if (isEmpty(stack) && player != null && player.isSneaking() && player.inventory.addItemStackToInventory(ItemEnum.MISCITEM.getDamagedStack(0))) {
+        if (isEmpty(stack) && player != null
+                && player.isSneaking()
+                && player.inventory.addItemStackToInventory(ItemEnum.MISCITEM.getDamagedStack(0))) {
             return ItemEnum.CELLCOMPONENT.getDamagedStack(stack.getItemDamage());
         }
 
@@ -79,9 +92,11 @@ public class ItemEMCCell extends ItemEMCCellBase implements IConfigurable, IItem
     public void loadConfig(final Configuration config) {
         for (int i = 0; i < itemCount; i++) {
             try {
-                CAPACITIES[i] = Double.valueOf(config.get(GROUP, "Tier" + i + "_Capacity", String.format("%.0f", CAPACITIES[i])).getString());
+                CAPACITIES[i] = Double.valueOf(
+                        config.get(GROUP, "Tier" + i + "_Capacity", String.format("%.0f", CAPACITIES[i])).getString());
             } catch (final NumberFormatException e) {
-                EquivalentEnergistics.logger.warn("Storage Cell Tier" + i + "_Capacity configured for invalid value! Default will be used!");
+                EquivalentEnergistics.logger.warn(
+                        "Storage Cell Tier" + i + "_Capacity configured for invalid value! Default will be used!");
             }
             DRAIN[i] = config.get(GROUP, "Tier_" + i + "_PowerDrain", DRAIN[i]).getDouble(DRAIN[i]);
         }
@@ -90,7 +105,8 @@ public class ItemEMCCell extends ItemEMCCellBase implements IConfigurable, IItem
     @Optional.Method(modid = "appliedenergistics2")
     @SuppressWarnings("rawtypes") // NOPMD
     @Override
-    public IMEInventoryHandler getCellInventory(final ItemStack stack, final ISaveProvider host, final StorageChannel channel) {
+    public IMEInventoryHandler getCellInventory(final ItemStack stack, final ISaveProvider host,
+            final StorageChannel channel) {
         if (channel == StorageChannel.ITEMS && isCell(stack)) {
             return new HandlerEMCCell(stack, host, CAPACITIES[stack.getItemDamage()]);
         }
@@ -110,7 +126,7 @@ public class ItemEMCCell extends ItemEMCCellBase implements IConfigurable, IItem
     public double cellIdleDrain(final ItemStack stack, final IMEInventory handler) {
         return DRAIN[stack.getItemDamage()];
     }
-    
+
     public double getStoredCellEMC(final ItemStack stack) {
         if (!isCell(stack) || !hasEMCTag(stack)) {
             return 0;
@@ -166,7 +182,7 @@ public class ItemEMCCell extends ItemEMCCellBase implements IConfigurable, IItem
 
         return toRemove;
     }
-    
+
     private void removeEMCTag(final ItemStack stack) {
         stack.getTagCompound().removeTag(EMC_TAG);
         if (stack.getTagCompound().hasNoTags()) {

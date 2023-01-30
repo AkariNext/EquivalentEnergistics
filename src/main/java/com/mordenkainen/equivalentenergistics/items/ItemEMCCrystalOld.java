@@ -1,5 +1,9 @@
 package com.mordenkainen.equivalentenergistics.items;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.config.Configuration;
+
 import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
 import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
 import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
@@ -10,9 +14,6 @@ import com.pahimar.ee3.api.exchange.IEnergyValueProvider;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.config.Configuration;
 
 @Optional.Interface(iface = "com.pahimar.ee3.api.exchange.IEnergyValueProvider", modid = "EE3")
 public class ItemEMCCrystalOld extends ItemMultiBase implements IEnergyValueProvider, IConfigurable {

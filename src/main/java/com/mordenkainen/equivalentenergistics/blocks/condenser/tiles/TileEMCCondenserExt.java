@@ -3,6 +3,14 @@ package com.mordenkainen.equivalentenergistics.blocks.condenser.tiles;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import appeng.api.networking.ticking.TickRateModulation;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.CondenserState;
@@ -10,24 +18,18 @@ import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 import com.mordenkainen.equivalentenergistics.util.inventory.InternalInventory;
 import com.mordenkainen.equivalentenergistics.util.inventory.InvUtils;
 
-import appeng.api.networking.ticking.TickRateModulation;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-
 public class TileEMCCondenserExt extends TileEMCCondenserAdv {
 
     private final static String SIDE_TAG = "sides";
 
     private final Map<ForgeDirection, SideSetting> sides = new HashMap<ForgeDirection, SideSetting>();
-    
+
     public enum SideSetting {
+
         NONE,
         INPUT,
         OUTPUT;
-        
+
         public SideSetting getNext() {
             int setting = this.ordinal() + 1;
             if (setting >= 3) {
@@ -36,7 +38,7 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
             return SideSetting.values()[setting];
         }
     }
-    
+
     public TileEMCCondenserExt() {
         this(new ItemStack(Item.getItemFromBlock(BlockEnum.EMCCONDENSER.getBlock()), 1, 2));
     }
@@ -52,14 +54,14 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
     @Override
     protected TickRateModulation tickingRequest() {
         if (isActive()) {
-            if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+            if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
                 updateState(CondenserState.IDLE);
                 return TickRateModulation.IDLE;
             }
-    
+
             importItems();
         }
-        
+
         return null;
     }
 
@@ -69,7 +71,12 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
             if (sides.get(side) != SideSetting.INPUT) {
                 continue;
             }
-            final IInventory sourceInv = CommonUtils.getTE(IInventory.class, worldObj, xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
+            final IInventory sourceInv = CommonUtils.getTE(
+                    IInventory.class,
+                    worldObj,
+                    xCoord + side.offsetX,
+                    yCoord + side.offsetY,
+                    zCoord + side.offsetZ);
             if (sourceInv != null) {
                 numItems -= InvUtils.extractWithCount(side.getOpposite(), sourceInv, getInventory(), numItems);
             }
@@ -92,7 +99,12 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
             if (sides.get(side) != SideSetting.OUTPUT) {
                 continue;
             }
-            final IInventory destInv = CommonUtils.getTE(IInventory.class, worldObj, xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
+            final IInventory destInv = CommonUtils.getTE(
+                    IInventory.class,
+                    worldObj,
+                    xCoord + side.offsetX,
+                    yCoord + side.offsetY,
+                    zCoord + side.offsetZ);
             if (destInv != null) {
                 final int ejected = InvUtils.ejectStack(stack, destInv, side.getOpposite(), numItems);
                 numItems -= ejected;
@@ -131,7 +143,7 @@ public class TileEMCCondenserExt extends TileEMCCondenserAdv {
                 sides.put(side, newData);
                 flag = true;
             }
-            
+
         }
         return flag;
     }

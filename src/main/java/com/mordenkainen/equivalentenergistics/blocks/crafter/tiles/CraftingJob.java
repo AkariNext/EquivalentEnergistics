@@ -1,12 +1,13 @@
 package com.mordenkainen.equivalentenergistics.blocks.crafter.tiles;
 
-import com.mordenkainen.equivalentenergistics.integration.ae2.grid.AEProxy;
-import com.mordenkainen.equivalentenergistics.integration.ae2.grid.GridUtils;
+import net.minecraft.item.ItemStack;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.networking.security.MachineSource;
-import net.minecraft.item.ItemStack;
+
+import com.mordenkainen.equivalentenergistics.integration.ae2.grid.AEProxy;
+import com.mordenkainen.equivalentenergistics.integration.ae2.grid.GridUtils;
 
 public class CraftingJob {
 
@@ -17,7 +18,8 @@ public class CraftingJob {
     private boolean finished;
     private final double cost;
 
-    public CraftingJob(final double craftingTicks, final ItemStack outputStack, final double cost, final AEProxy proxy, final MachineSource source) {
+    public CraftingJob(final double craftingTicks, final ItemStack outputStack, final double cost, final AEProxy proxy,
+            final MachineSource source) {
         this.craftingTicks = craftingTicks;
         this.outputStack = outputStack;
         this.proxy = proxy;
@@ -32,7 +34,7 @@ public class CraftingJob {
     public ItemStack getOutput() {
         return outputStack;
     }
-    
+
     public double getCost() {
         return cost;
     }
@@ -48,7 +50,8 @@ public class CraftingJob {
                 return false;
             }
         } else {
-            final double powerExtracted = GridUtils.extractAEPower(proxy, cost, Actionable.SIMULATE, PowerMultiplier.CONFIG) + 0.9;
+            final double powerExtracted = GridUtils
+                    .extractAEPower(proxy, cost, Actionable.SIMULATE, PowerMultiplier.CONFIG) + 0.9;
             if (powerExtracted - cost >= 0.0D) {
                 GridUtils.extractAEPower(proxy, cost, Actionable.MODULATE, PowerMultiplier.CONFIG);
                 craftingTicks--;
@@ -56,7 +59,7 @@ public class CraftingJob {
                 return false;
             }
         }
-        
+
         return true;
     }
 

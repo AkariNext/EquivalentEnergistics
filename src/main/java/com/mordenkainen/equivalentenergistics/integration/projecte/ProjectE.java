@@ -5,19 +5,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import moze_intel.projecte.api.ProjectEAPI;
+import moze_intel.projecte.api.event.EMCRemapEvent;
+import moze_intel.projecte.api.event.PlayerKnowledgeChangeEvent;
+import moze_intel.projecte.api.item.IItemEmc;
+
+import net.minecraft.item.ItemStack;
+
 import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterBase;
 import com.mordenkainen.equivalentenergistics.integration.IEMCHandler;
 import com.mordenkainen.equivalentenergistics.integration.ae2.cache.crafting.EMCCraftingGrid;
 import com.mordenkainen.equivalentenergistics.items.ItemEMCCrystal;
 import com.mordenkainen.equivalentenergistics.items.ItemEMCCrystalOld;
 import com.mordenkainen.equivalentenergistics.items.ItemEnum;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import moze_intel.projecte.api.ProjectEAPI;
-import moze_intel.projecte.api.event.EMCRemapEvent;
-import moze_intel.projecte.api.event.PlayerKnowledgeChangeEvent;
-import moze_intel.projecte.api.item.IItemEmc;
-import net.minecraft.item.ItemStack;
 
 public class ProjectE implements IEMCHandler {
 
@@ -40,7 +41,8 @@ public class ProjectE implements IEMCHandler {
     public List<ItemStack> getTransmutations(final TileEMCCrafterBase tile) {
         List<ItemStack> transmutations;
 
-        transmutations = ProjectEAPI.getTransmutationProxy().getKnowledge(UUID.fromString(tile.getCurrentTome().getTagCompound().getString("OwnerUUID")));
+        transmutations = ProjectEAPI.getTransmutationProxy()
+                .getKnowledge(UUID.fromString(tile.getCurrentTome().getTagCompound().getString("OwnerUUID")));
 
         if (transmutations == null) {
             transmutations = new ArrayList<ItemStack>();
@@ -58,20 +60,38 @@ public class ProjectE implements IEMCHandler {
 
     @Override
     public boolean isValidTome(final ItemStack itemStack) {
-        return itemStack != null && ItemEnum.EMCBOOK.isSameItem(itemStack) && itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("OwnerUUID");
+        return itemStack != null && ItemEnum.EMCBOOK.isSameItem(itemStack)
+                && itemStack.hasTagCompound()
+                && itemStack.getTagCompound().hasKey("OwnerUUID");
     }
 
     @Override
     public void setCrystalEMC() {
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 0), (int) ItemEMCCrystal.CRYSTAL_VALUES[0]);
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 1), (int) ItemEMCCrystal.CRYSTAL_VALUES[1]);
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 2), (int) ItemEMCCrystal.CRYSTAL_VALUES[2]);
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 3), (int) ItemEMCCrystal.CRYSTAL_VALUES[3]);
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 4), (int) ItemEMCCrystal.CRYSTAL_VALUES[4]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 0),
+                (int) ItemEMCCrystal.CRYSTAL_VALUES[0]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 1),
+                (int) ItemEMCCrystal.CRYSTAL_VALUES[1]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 2),
+                (int) ItemEMCCrystal.CRYSTAL_VALUES[2]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 3),
+                (int) ItemEMCCrystal.CRYSTAL_VALUES[3]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTAL.getItem(), 1, 4),
+                (int) ItemEMCCrystal.CRYSTAL_VALUES[4]);
 
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTALOLD.getItem(), 1, 0), (int) ItemEMCCrystalOld.CRYSTAL_VALUES[0]);
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTALOLD.getItem(), 1, 1), (int) ItemEMCCrystalOld.CRYSTAL_VALUES[1]);
-        ProjectEAPI.getEMCProxy().registerCustomEMC(new ItemStack(ItemEnum.EMCCRYSTALOLD.getItem(), 1, 2), (int) ItemEMCCrystalOld.CRYSTAL_VALUES[2]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTALOLD.getItem(), 1, 0),
+                (int) ItemEMCCrystalOld.CRYSTAL_VALUES[0]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTALOLD.getItem(), 1, 1),
+                (int) ItemEMCCrystalOld.CRYSTAL_VALUES[1]);
+        ProjectEAPI.getEMCProxy().registerCustomEMC(
+                new ItemStack(ItemEnum.EMCCRYSTALOLD.getItem(), 1, 2),
+                (int) ItemEMCCrystalOld.CRYSTAL_VALUES[2]);
     }
 
     @Override

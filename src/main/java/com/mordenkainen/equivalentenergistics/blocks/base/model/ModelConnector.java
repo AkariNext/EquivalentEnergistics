@@ -7,7 +7,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public final class ModelConnector extends ModelBase {
 
     private final ModelRenderer connector;
-    
+
     public ModelConnector(final int x, final int y) {
         super();
         textureWidth = 64;

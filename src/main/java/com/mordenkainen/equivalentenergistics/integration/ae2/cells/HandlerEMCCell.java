@@ -1,11 +1,12 @@
 package com.mordenkainen.equivalentenergistics.integration.ae2.cells;
 
-import com.mordenkainen.equivalentenergistics.util.EMCPool;
-
-import appeng.api.storage.ISaveProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
+import appeng.api.storage.ISaveProvider;
+
+import com.mordenkainen.equivalentenergistics.util.EMCPool;
 
 public class HandlerEMCCell extends HandlerEMCCellBase {
 
@@ -26,7 +27,7 @@ public class HandlerEMCCell extends HandlerEMCCellBase {
             pool.setCurrentEMC(cellData.getLong(EMC_TAG));
         }
     }
-    
+
     @Override
     public int getCellStatus() {
         if (pool.getCurrentEMC() >= pool.getMaxEMC()) {
@@ -42,7 +43,7 @@ public class HandlerEMCCell extends HandlerEMCCellBase {
     public double getCurrentEMC() {
         return pool.getCurrentEMC();
     }
-    
+
     @Override
     public void setCurrentEMC(final double currentEMC) {}
 
@@ -101,12 +102,12 @@ public class HandlerEMCCell extends HandlerEMCCellBase {
             saveProvider.saveChanges(this);
         }
     }
-    
+
     private void updateProvider() {
-        if(saveProvider instanceof TileEntity) {
+        if (saveProvider instanceof TileEntity) {
             final TileEntity tile = (TileEntity) saveProvider;
             tile.getWorldObj().markBlockForUpdate(tile.xCoord, tile.yCoord, tile.zCoord);
         }
     }
-    
+
 }

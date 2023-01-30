@@ -1,9 +1,9 @@
 package com.mordenkainen.equivalentenergistics.util;
 
-import com.google.common.base.Equivalence;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.google.common.base.Equivalence;
 
 public class CompItemStack extends Equivalence<ItemStack> {
 

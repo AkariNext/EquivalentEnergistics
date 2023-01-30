@@ -1,9 +1,9 @@
 package com.mordenkainen.equivalentenergistics.blocks.condenser.tiles;
 
-import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 
 public class TileEMCCondenserUlt extends TileEMCCondenserExt {
 

@@ -3,12 +3,12 @@ package com.mordenkainen.equivalentenergistics.util.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mordenkainen.equivalentenergistics.util.CommonUtils;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 
 public final class InvUtils {
 
@@ -25,7 +25,7 @@ public final class InvUtils {
         }
         return output;
     }
-    
+
     public static boolean isFull(final IInventory inv) {
         for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
             final ItemStack stackInSlot = inv.getStackInSlot(slot);
@@ -35,7 +35,7 @@ public final class InvUtils {
         }
         return true;
     }
-    
+
     public static boolean isEmpty(final IInventory inv) {
         for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
             final ItemStack stackInSlot = inv.getStackInSlot(slot);
@@ -45,8 +45,9 @@ public final class InvUtils {
         }
         return true;
     }
-    
-    public static int extractWithCount(final ForgeDirection side, final IInventory dest, final IInventory src, final int count) {
+
+    public static int extractWithCount(final ForgeDirection side, final IInventory dest, final IInventory src,
+            final int count) {
         int leftToMove = count;
         final ISidedInventory srcSidedIv = InventoryAdapter.getAdapter(src);
         for (int i = 0; i < dest.getSizeInventory() && leftToMove > 0; i++) {
@@ -54,16 +55,21 @@ public final class InvUtils {
             if (destStack != null && (!destStack.isStackable() || destStack.stackSize >= destStack.getMaxStackSize())) {
                 continue;
             }
-            
+
             for (final int slot : srcSidedIv.getAccessibleSlotsFromSide(side.ordinal())) {
                 final ItemStack srcStack = srcSidedIv.getStackInSlot(slot);
-                if (srcStack != null && CommonUtils.willItemsStack(destStack, srcStack) && srcSidedIv.canExtractItem(slot, srcStack, side.getOpposite().ordinal())) {
+                if (srcStack != null && CommonUtils.willItemsStack(destStack, srcStack)
+                        && srcSidedIv.canExtractItem(slot, srcStack, side.getOpposite().ordinal())) {
                     int toMove = 0;
-                    if (destStack == null ) {
+                    if (destStack == null) {
                         toMove = Math.min(leftToMove, srcStack.stackSize);
-                        dest.setInventorySlotContents(i, new ItemStack(srcStack.getItem(), toMove, srcStack.getItemDamage()));
+                        dest.setInventorySlotContents(
+                                i,
+                                new ItemStack(srcStack.getItem(), toMove, srcStack.getItemDamage()));
                     } else {
-                        toMove = Math.min(leftToMove, Math.min(srcStack.stackSize, destStack.getMaxStackSize() - destStack.stackSize));
+                        toMove = Math.min(
+                                leftToMove,
+                                Math.min(srcStack.stackSize, destStack.getMaxStackSize() - destStack.stackSize));
                         destStack.stackSize += toMove;
                     }
                     srcStack.stackSize -= toMove;
@@ -71,7 +77,7 @@ public final class InvUtils {
                         srcSidedIv.setInventorySlotContents(slot, null);
                     }
                     leftToMove -= toMove;
-                    
+
                     if (leftToMove <= 0) {
                         break;
                     }
@@ -82,7 +88,8 @@ public final class InvUtils {
         return count - leftToMove;
     }
 
-    public static int ejectStack(final ItemStack stack, final IInventory destInv, final ForgeDirection side, final int maxItems) {
+    public static int ejectStack(final ItemStack stack, final IInventory destInv, final ForgeDirection side,
+            final int maxItems) {
         int remainingItems = maxItems;
         final ItemStack sourceStack = stack.copy();
         final ISidedInventory inv = InventoryAdapter.getAdapter(destInv);
@@ -97,7 +104,9 @@ public final class InvUtils {
                     remainingItems -= toMove;
                     inv.setInventorySlotContents(slot, destStack);
                 } else if (CommonUtils.isSameItem(destStack, sourceStack)) {
-                    final int toMove = Math.min(Math.min(sourceStack.stackSize, destStack.getMaxStackSize() - destStack.stackSize), remainingItems);
+                    final int toMove = Math.min(
+                            Math.min(sourceStack.stackSize, destStack.getMaxStackSize() - destStack.stackSize),
+                            remainingItems);
                     destStack.stackSize += toMove;
                     sourceStack.stackSize -= toMove;
                     remainingItems -= toMove;
@@ -111,5 +120,4 @@ public final class InvUtils {
         return maxItems - remainingItems;
     }
 
-    
 }

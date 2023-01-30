@@ -3,6 +3,19 @@ package com.mordenkainen.equivalentenergistics.blocks.crafter.tiles;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+import appeng.api.config.Actionable;
+import appeng.api.networking.GridFlags;
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.ticking.IGridTickable;
+import appeng.api.networking.ticking.TickRateModulation;
+import appeng.api.networking.ticking.TickingRequest;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.BlockEMCCrafter;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
@@ -13,19 +26,8 @@ import com.mordenkainen.equivalentenergistics.integration.ae2.tiles.TileAEBase;
 import com.mordenkainen.equivalentenergistics.integration.waila.IWailaNBTProvider;
 import com.mordenkainen.equivalentenergistics.util.IDropItems;
 
-import appeng.api.config.Actionable;
-import appeng.api.networking.GridFlags;
-import appeng.api.networking.IGridNode;
-import appeng.api.networking.ticking.IGridTickable;
-import appeng.api.networking.ticking.TickRateModulation;
-import appeng.api.networking.ticking.TickingRequest;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
-public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCrafter, IGridTickable, IWailaNBTProvider, IDropItems, ICraftingMonitor, ITransProvider {
+public abstract class TileEMCCrafterBase extends TileAEBase
+        implements IEMCCrafter, IGridTickable, IWailaNBTProvider, IDropItems, ICraftingMonitor, ITransProvider {
 
     private static final String TOME_TAG = "Tome";
     private static final String OWNER_TAG = "Owner";
@@ -34,7 +36,7 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
     private static final String DISPLAY_TAG = "DisplayStacks";
     private static final String STACK_TAG = "Stack";
     private static final String ERROR_TAG = "Errored";
-    
+
     private ItemStack transmutationItem;
     private double currentEMC;
     private List<ItemStack> displayStacks = new ArrayList<ItemStack>();
@@ -42,7 +44,7 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
     private boolean crafting;
     private boolean errored;
     private boolean doDrops = true;
-    
+
     public final int maxJobs;
 
     public TileEMCCrafterBase(final int jobs, final double time, final int meta) {
@@ -74,11 +76,11 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
         if (refreshNetworkState()) {
             markForUpdate();
         }
-        
+
         if (!isActive()) {
             return TickRateModulation.IDLE;
         }
-        
+
         injectEMC();
 
         if (manager.isCrafting()) {
@@ -97,7 +99,9 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
     public void readFromNBT(final NBTTagCompound data) {
         super.readFromNBT(data);
         currentEMC = data.getDouble(EMC_TAG);
-        transmutationItem = data.hasKey(TOME_TAG) ? ItemStack.loadItemStackFromNBT((NBTTagCompound) data.getTag(TOME_TAG)) : null;
+        transmutationItem = data.hasKey(TOME_TAG)
+                ? ItemStack.loadItemStackFromNBT((NBTTagCompound) data.getTag(TOME_TAG))
+                : null;
         manager.readFromNBT(data);
         displayStacks = manager.getCurrentJobs();
         markForUpdate();
@@ -114,7 +118,7 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
         }
         manager.writeToNBT(data);
     }
-    
+
     @Override
     public boolean addJob(final ItemStack stack, final double inputCost, final double outputCost) {
         if (isActive() && manager.addJob(stack, outputCost, BlockEMCCrafter.powerPerEMC)) {
@@ -155,7 +159,7 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
             drops.add(transmutationItem);
         }
     }
-    
+
     @Override
     public void disableDrops() {
         doDrops = false;
@@ -166,17 +170,17 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
         super.getPacketData(nbttagcompound);
         nbttagcompound.setBoolean(CRAFTING_TAG, manager.isCrafting());
         nbttagcompound.setBoolean(ERROR_TAG, errored);
-        
+
         if (manager.isCrafting()) {
             final NBTTagCompound displayTags = new NBTTagCompound();
             for (int i = 0; i < displayStacks.size(); i++) {
                 if (displayStacks.get(i) != null) {
-                    displayTags.setTag(STACK_TAG + i, displayStacks.get(i).writeToNBT(new NBTTagCompound())); 
+                    displayTags.setTag(STACK_TAG + i, displayStacks.get(i).writeToNBT(new NBTTagCompound()));
                 }
             }
             nbttagcompound.setTag(DISPLAY_TAG, displayTags);
         }
-        
+
         if (transmutationItem != null) {
             nbttagcompound.setTag(TOME_TAG, transmutationItem.writeToNBT(new NBTTagCompound()));
         }
@@ -186,7 +190,7 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
     protected boolean readPacketData(final NBTTagCompound nbttagcompound) {
         crafting = nbttagcompound.getBoolean(CRAFTING_TAG);
         errored = nbttagcompound.getBoolean(ERROR_TAG);
-        
+
         displayStacks = new ArrayList<ItemStack>();
         if (nbttagcompound.hasKey(DISPLAY_TAG)) {
             final NBTTagCompound invList = nbttagcompound.getCompoundTag(DISPLAY_TAG);
@@ -198,9 +202,11 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
                 }
             }
         }
-    
-        transmutationItem = nbttagcompound.hasKey(TOME_TAG) ? ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag(TOME_TAG)) : null;
-        
+
+        transmutationItem = nbttagcompound.hasKey(TOME_TAG)
+                ? ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag(TOME_TAG))
+                : null;
+
         return super.readPacketData(nbttagcompound);
     }
 
@@ -219,15 +225,15 @@ public abstract class TileEMCCrafterBase extends TileAEBase implements IEMCCraft
         displayStacks = manager.getCurrentJobs();
         markForUpdate();
     }
-    
+
     public List<ItemStack> getDisplayStacks() {
         return displayStacks;
     }
-    
+
     public boolean isCrafting() {
         return crafting;
     }
-    
+
     public boolean isErrored() {
         return errored;
     }

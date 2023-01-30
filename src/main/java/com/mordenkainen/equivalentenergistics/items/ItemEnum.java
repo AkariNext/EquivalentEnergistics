@@ -1,17 +1,17 @@
 package com.mordenkainen.equivalentenergistics.items;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.config.Configuration;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
 import com.mordenkainen.equivalentenergistics.core.Reference;
 import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
-
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.config.Configuration;
 
 public enum ItemEnum {
 
@@ -64,7 +64,8 @@ public enum ItemEnum {
         this(internalName, item, configKey, hidden, Predicates.alwaysTrue());
     }
 
-    ItemEnum(final String internalName, final Item item, final String configKey, final boolean hidden, final Predicate<?> requirements) {
+    ItemEnum(final String internalName, final Item item, final String configKey, final boolean hidden,
+            final Predicate<?> requirements) {
         this.internalName = internalName;
         this.item = item;
         this.item.setUnlocalizedName(Reference.MOD_ID + ":" + internalName);

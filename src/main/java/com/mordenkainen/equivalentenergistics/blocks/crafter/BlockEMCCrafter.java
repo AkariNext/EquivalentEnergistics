@@ -1,5 +1,14 @@
 package com.mordenkainen.equivalentenergistics.blocks.crafter;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
+
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
 import com.mordenkainen.equivalentenergistics.blocks.base.block.BlockMultiContainerBase;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafter;
@@ -14,16 +23,6 @@ import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.config.Configuration;
 
 public class BlockEMCCrafter extends BlockMultiContainerBase implements IConfigurable {
 
@@ -76,7 +75,8 @@ public class BlockEMCCrafter extends BlockMultiContainerBase implements IConfigu
     }
 
     @Override
-    public final boolean onBlockActivated(final World world, final int x, final int y, final int z, final EntityPlayer player, final int side, final float hitX, final float hitY, final float hitZ) {
+    public final boolean onBlockActivated(final World world, final int x, final int y, final int z,
+            final EntityPlayer player, final int side, final float hitX, final float hitY, final float hitZ) {
         final TileEMCCrafterBase tileCrafter = CommonUtils.getTE(TileEMCCrafterBase.class, world, x, y, z);
 
         if (tileCrafter == null || !tileCrafter.canPlayerInteract(player)) {

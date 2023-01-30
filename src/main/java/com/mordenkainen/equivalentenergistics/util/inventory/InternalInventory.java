@@ -1,11 +1,12 @@
 package com.mordenkainen.equivalentenergistics.util.inventory;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class InternalInventory implements IInventory {
 
@@ -16,7 +17,8 @@ public class InternalInventory implements IInventory {
     private final int stackLimit;
     private final IInvChangeNotifier te;
 
-    public InternalInventory(final String customName, final int size, final int stackLimit, final IInvChangeNotifier te) {
+    public InternalInventory(final String customName, final int size, final int stackLimit,
+            final IInvChangeNotifier te) {
         slots = new ItemStack[size];
         this.customName = customName;
         this.stackLimit = stackLimit;
@@ -67,7 +69,7 @@ public class InternalInventory implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(final int slotId) { 
+    public ItemStack getStackInSlotOnClosing(final int slotId) {
         final ItemStack stack = getStackInSlot(slotId);
         setInventorySlotContents(slotId, null);
         return stack; // NOPMD

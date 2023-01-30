@@ -2,18 +2,19 @@ package com.mordenkainen.equivalentenergistics.integration.ae2;
 
 import java.util.ArrayList;
 
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import appeng.api.AEApi;
+import appeng.api.networking.crafting.ICraftingPatternDetails;
+import appeng.api.storage.data.IAEItemStack;
+
 import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
 import com.mordenkainen.equivalentenergistics.items.ItemEMCCrystal;
 import com.mordenkainen.equivalentenergistics.items.ItemEnum;
 import com.mordenkainen.equivalentenergistics.items.ItemPattern;
-
-import appeng.api.AEApi;
-import appeng.api.networking.crafting.ICraftingPatternDetails;
-import appeng.api.storage.data.IAEItemStack;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public final class EMCCraftingPattern implements ICraftingPatternDetails {
 
@@ -96,7 +97,8 @@ public final class EMCCraftingPattern implements ICraftingPatternDetails {
         valid = true;
         outputEMC = inputEMC = ItemEMCCrystal.CRYSTAL_VALUES[tier + 1];
         result[0] = AEApi.instance().storage().createItemStack(ItemEnum.EMCCRYSTAL.getStack(64, tier));
-        ingredients = new IAEItemStack[] { AEApi.instance().storage().createItemStack(ItemEnum.EMCCRYSTAL.getDamagedStack(tier + 1)) };
+        ingredients = new IAEItemStack[] {
+                AEApi.instance().storage().createItemStack(ItemEnum.EMCCRYSTAL.getDamagedStack(tier + 1)) };
     }
 
     private void createItemPattern(final ItemStack craftingResult) {
@@ -114,7 +116,9 @@ public final class EMCCraftingPattern implements ICraftingPatternDetails {
             final double crystalEMC = ItemEMCCrystal.CRYSTAL_VALUES[x];
             int numCrystals = (int) (remainingEMC / crystalEMC);
             while (numCrystals > 0) {
-                crystals.add(AEApi.instance().storage().createItemStack(ItemEnum.EMCCRYSTAL.getDamagedStack(x)).setStackSize(numCrystals));
+                crystals.add(
+                        AEApi.instance().storage().createItemStack(ItemEnum.EMCCRYSTAL.getDamagedStack(x))
+                                .setStackSize(numCrystals));
                 final double totalEMC = crystalEMC * numCrystals;
                 remainingEMC -= totalEMC;
                 inputEMC += totalEMC;

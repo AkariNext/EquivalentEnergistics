@@ -1,16 +1,17 @@
 package com.mordenkainen.equivalentenergistics.blocks.condenser.tiles;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import appeng.api.config.Actionable;
+import appeng.api.networking.ticking.TickRateModulation;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.CondenserState;
 import com.mordenkainen.equivalentenergistics.integration.ae2.grid.GridUtils;
 import com.mordenkainen.equivalentenergistics.integration.waila.IWailaNBTProvider;
-
-import appeng.api.config.Actionable;
-import appeng.api.networking.ticking.TickRateModulation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEMCCondenser extends TileEMCCondenserBase implements IWailaNBTProvider {
 
@@ -29,7 +30,7 @@ public class TileEMCCondenser extends TileEMCCondenserBase implements IWailaNBTP
         }
         return tag;
     }
-    
+
     @Override
     public void readFromNBT(final NBTTagCompound data) {
         super.readFromNBT(data);
@@ -45,7 +46,7 @@ public class TileEMCCondenser extends TileEMCCondenserBase implements IWailaNBTP
             data.setDouble(EMC_TAG, currentEMC);
         }
     }
-    
+
     @Override
     protected TickRateModulation tickingRequest() {
         if (isActive() && currentEMC > 0) {
@@ -55,7 +56,7 @@ public class TileEMCCondenser extends TileEMCCondenserBase implements IWailaNBTP
                 return TickRateModulation.IDLE;
             }
         }
-        
+
         return null;
     }
 

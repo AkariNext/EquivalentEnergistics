@@ -3,9 +3,6 @@ package com.mordenkainen.equivalentenergistics.util;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
-import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -13,6 +10,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
+import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
 
 public final class CommonUtils {
 
@@ -35,13 +35,21 @@ public final class CommonUtils {
         return false;
     }
 
-    public static void spawnEntItem(final World world, final double x, final double y, final double z, final ItemStack item) {
-        if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots && item != null && item.stackSize > 0) {
+    public static void spawnEntItem(final World world, final double x, final double y, final double z,
+            final ItemStack item) {
+        if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots
+                && item != null
+                && item.stackSize > 0) {
             final float rx = world.rand.nextFloat() * 0.8F + 0.1F;
             final float ry = world.rand.nextFloat() * 0.8F + 0.1F;
             final float rz = world.rand.nextFloat() * 0.8F + 0.1F;
 
-            final EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
+            final EntityItem entityItem = new EntityItem(
+                    world,
+                    x + rx,
+                    y + ry,
+                    z + rz,
+                    new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
 
             if (item.hasTagCompound()) {
                 entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
@@ -59,7 +67,7 @@ public final class CommonUtils {
         final TileEntity tile = world.getTileEntity(x, y, z);
         return type.isInstance(tile) ? (T) tile : null;
     }
-    
+
     public static String formatEMC(final double emc) {
         double displayValue = emc;
 
@@ -74,20 +82,21 @@ public final class CommonUtils {
         final DecimalFormat formatter = new DecimalFormat("#.###");
         return formatter.format(displayValue) + ' ' + level;
     }
-    
+
     public static ItemStack filterForEmpty(final ItemStack stack) {
         return stack.stackSize <= 0 ? null : stack;
     }
-    
+
     public static boolean willItemsStack(final ItemStack dest, final ItemStack src) {
-        if(dest == null && src != null) {
+        if (dest == null && src != null) {
             return true;
         }
         return isSameItem(dest, src);
     }
 
     public static boolean isSameItem(final ItemStack stack1, final ItemStack stack2) {
-        return stack1.getItem() == stack2.getItem() && stack1.getItemDamage() == stack2.getItemDamage() && ItemStack.areItemStackTagsEqual(stack1, stack2);
+        return stack1.getItem() == stack2.getItem() && stack1.getItemDamage() == stack2.getItemDamage()
+                && ItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 
     public static void debugLog(final String message) {

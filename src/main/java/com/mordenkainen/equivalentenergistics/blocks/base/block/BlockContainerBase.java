@@ -3,12 +3,6 @@ package com.mordenkainen.equivalentenergistics.blocks.base.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mordenkainen.equivalentenergistics.integration.ae2.grid.IAEProxyHost;
-import com.mordenkainen.equivalentenergistics.util.CommonUtils;
-import com.mordenkainen.equivalentenergistics.util.IDropItems;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -17,6 +11,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.mordenkainen.equivalentenergistics.integration.ae2.grid.IAEProxyHost;
+import com.mordenkainen.equivalentenergistics.util.CommonUtils;
+import com.mordenkainen.equivalentenergistics.util.IDropItems;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BlockContainerBase extends BlockContainer {
 
@@ -29,7 +30,8 @@ public abstract class BlockContainerBase extends BlockContainer {
     public void registerBlockIcons(final IIconRegister register) {}
 
     @Override
-    public void breakBlock(final World world, final int x, final int y, final int z, final Block block, final int metaData) {
+    public void breakBlock(final World world, final int x, final int y, final int z, final Block block,
+            final int metaData) {
         if (!world.isRemote) {
             final IDropItems tile = CommonUtils.getTE(IDropItems.class, world, x, y, z);
 
@@ -47,7 +49,8 @@ public abstract class BlockContainerBase extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(final World world, final int x, final int y, final int z, final EntityLivingBase player, final ItemStack itemStack) {
+    public void onBlockPlacedBy(final World world, final int x, final int y, final int z, final EntityLivingBase player,
+            final ItemStack itemStack) {
         final IAEProxyHost tile = CommonUtils.getTE(IAEProxyHost.class, world, x, y, z);
 
         if (tile != null && player instanceof EntityPlayer) {

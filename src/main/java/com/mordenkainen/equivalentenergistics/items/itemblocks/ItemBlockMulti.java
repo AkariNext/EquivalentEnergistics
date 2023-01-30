@@ -15,7 +15,7 @@ public class ItemBlockMulti extends ItemBlockWithMetadata {
     public String getUnlocalizedName(final ItemStack stack) {
         return this.getUnlocalizedName() + "." + stack.getItemDamage();
     }
-    
+
     @Override
     public EnumRarity getRarity(final ItemStack stack) {
         return EnumRarity.values()[stack.getItemDamage()];

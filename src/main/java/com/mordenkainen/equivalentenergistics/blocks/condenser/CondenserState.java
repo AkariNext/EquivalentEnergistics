@@ -1,9 +1,11 @@
 package com.mordenkainen.equivalentenergistics.blocks.condenser;
 
-import appeng.api.networking.ticking.TickRateModulation;
 import net.minecraft.util.StatCollector;
 
+import appeng.api.networking.ticking.TickRateModulation;
+
 public enum CondenserState {
+
     IDLE(TickRateModulation.IDLE, "message.condenser.statename.idle", false),
     ACTIVE(TickRateModulation.URGENT, "message.condenser.statename.active", false),
     NOEMCSTORAGE(TickRateModulation.IDLE, "message.condenser.statename.noemcstorage", true),
@@ -19,16 +21,15 @@ public enum CondenserState {
         this.tickRate = tickRate;
         this.errorCondition = errorCondition;
     }
-    
+
     public String getStateName() {
         return stateName;
     }
 
-    
     public TickRateModulation getTickRate() {
         return tickRate;
     }
-    
+
     public boolean isError() {
         return errorCondition;
     }

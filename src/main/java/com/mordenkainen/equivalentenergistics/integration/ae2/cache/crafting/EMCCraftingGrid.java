@@ -6,6 +6,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+
+import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridHost;
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.events.MENetworkCraftingPatternChange;
+
 import com.google.common.base.Equivalence;
 import com.google.common.base.Equivalence.Wrapper;
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
@@ -13,14 +21,7 @@ import com.mordenkainen.equivalentenergistics.integration.Integration;
 import com.mordenkainen.equivalentenergistics.integration.ae2.EMCCraftingPattern;
 import com.mordenkainen.equivalentenergistics.items.ItemEnum;
 import com.mordenkainen.equivalentenergistics.util.CompItemStack;
-
-import appeng.api.networking.IGrid;
-import appeng.api.networking.IGridHost;
-import appeng.api.networking.IGridNode;
-import appeng.api.networking.events.MENetworkCraftingPatternChange;
 import cpw.mods.fml.common.FMLCommonHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 
 public class EMCCraftingGrid implements IEMCCraftingGrid {
 
@@ -114,7 +115,7 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
     public EMCCraftingPattern[] getPatterns() {
         return patterns.isEmpty() ? new EMCCraftingPattern[0] : patterns.values().toArray(new EMCCraftingPattern[0]);
     }
-    
+
     @Override
     public boolean allCraftersBusy() {
         for (final IEMCCrafter crafter : crafters.keySet()) {
@@ -124,7 +125,7 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
         }
         return true;
     }
-    
+
     @Override
     public boolean addJob(final ItemStack stack, final double inputCost, final double outputCost) {
         for (final IEMCCrafter crafter : crafters.keySet()) {
@@ -132,7 +133,7 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -144,7 +145,13 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
                 final EMCCraftingPattern pattern = patternList.get(wrappedStack);
                 pattern.rebuildPattern();
                 if (!pattern.valid) {
-                    EquivalentEnergistics.logger.warn("Invalid EMC pattern detected. Item: " + StatCollector.translateToLocal(pattern.getOutputs()[0].getItem().getUnlocalizedName(pattern.getOutputs()[0].getItemStack()) + ".name") + " EMC: " + String.format("%f", pattern.outputEMC));
+                    EquivalentEnergistics.logger.warn(
+                            "Invalid EMC pattern detected. Item: "
+                                    + StatCollector.translateToLocal(
+                                            pattern.getOutputs()[0].getItem().getUnlocalizedName(
+                                                    pattern.getOutputs()[0].getItemStack()) + ".name")
+                                    + " EMC: "
+                                    + String.format("%f", pattern.outputEMC));
                     iter.remove();
                 }
             } else {
@@ -178,9 +185,15 @@ public class EMCCraftingGrid implements IEMCCraftingGrid {
             if (pattern.valid) {
                 patternList.put(wrappedStack, new EMCCraftingPattern(wrappedStack.get()));
             } else {
-                EquivalentEnergistics.logger.warn("Invalid EMC pattern detected. Item: " + StatCollector.translateToLocal(pattern.getOutputs()[0].getItem().getUnlocalizedName(pattern.getOutputs()[0].getItemStack()) + ".name") + " EMC: " + String.format("%f", pattern.outputEMC));
+                EquivalentEnergistics.logger.warn(
+                        "Invalid EMC pattern detected. Item: "
+                                + StatCollector.translateToLocal(
+                                        pattern.getOutputs()[0].getItem()
+                                                .getUnlocalizedName(pattern.getOutputs()[0].getItemStack()) + ".name")
+                                + " EMC: "
+                                + String.format("%f", pattern.outputEMC));
             }
         }
     }
-    
+
 }

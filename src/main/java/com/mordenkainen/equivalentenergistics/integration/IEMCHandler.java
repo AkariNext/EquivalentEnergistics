@@ -3,9 +3,9 @@ package com.mordenkainen.equivalentenergistics.integration;
 import java.util.List;
 import java.util.UUID;
 
-import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterBase;
-
 import net.minecraft.item.ItemStack;
+
+import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterBase;
 
 public interface IEMCHandler {
 

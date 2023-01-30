@@ -1,16 +1,13 @@
 // Add your dependencies here
 
 dependencies {
-    compile "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:dev"
-    compile "codechicken:CodeChickenCore:${minecraft_version}-${ccc_version}:dev"
-    compile "codechicken:NotEnoughItems:${minecraft_version}-${nei_version}:dev"
-    compile "mcp.mobius.waila:Waila:${waila_version}_${minecraft_version}:dev"
-    compile ("com.pahimar.ee3:EquivalentExchange3:${minecraft_version}-${ee3_version}:dev"){
+    compileOnly('com.github.GTNewHorizons:CodeChickenLib:1.1.5.7:dev') {transitive=false}
+    compileOnly('com.github.GTNewHorizons:CodeChickenCore:1.1.7:dev') {transitive=false}
+    compileOnly('com.github.GTNewHorizons:waila:1.5.22:dev') {transitive=false}
+    compileOnly('com.github.GTNewHorizons:NotEnoughItems:2.3.24-GTNH:dev') {transitive=false}
+    compile('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-152-GTNH:dev')
+    compileOnly ("com.pahimar:Equivalent-Exchange-3:MC1.7.10-4-ged796e3.dirty:dev"){
         transitive = false
     }
-    compile ("appeng:appliedenergistics2:${ae2_version}:api"){
-        transitive = false
-    }
-    compile "xyz.akirin.fmpe:FMProjectE:2.1.0:dev"
-
+    implementation "xyz.akirin.fmpe:FMProjectE:2.1.0:dev"
 }

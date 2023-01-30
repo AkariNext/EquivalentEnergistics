@@ -1,16 +1,17 @@
 package com.mordenkainen.equivalentenergistics.blocks.condenser.tiles;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import appeng.api.networking.ticking.TickRateModulation;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.CondenserState;
 
-import appeng.api.networking.ticking.TickRateModulation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 public class TileEMCCondenserAdv extends TileEMCCondenserBase {
 
-    protected int updateCounter ;
+    protected int updateCounter;
 
     public TileEMCCondenserAdv() {
         this(new ItemStack(Item.getItemFromBlock(BlockEnum.EMCCONDENSER.getBlock()), 1, 1));
@@ -31,10 +32,10 @@ public class TileEMCCondenserAdv extends TileEMCCondenserBase {
             updateState(CondenserState.IDLE);
             return TickRateModulation.IDLE;
         }
-        
+
         return null;
     }
-    
+
     @Override
     protected boolean updateState(final CondenserState newState) {
         if (state != newState) {

@@ -2,11 +2,6 @@ package com.mordenkainen.equivalentenergistics.items;
 
 import java.util.List;
 
-import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
-import com.mordenkainen.equivalentenergistics.items.base.ItemBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +9,12 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
+import com.mordenkainen.equivalentenergistics.items.base.ItemBase;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemEMCBook extends ItemBase {
 
@@ -41,12 +42,14 @@ public class ItemEMCBook extends ItemBase {
             if (stackNBT.hasKey(OWNER_TAG) && player.isSneaking()) {
                 stackNBT.removeTag(OWNER_TAG);
                 stackNBT.removeTag(UUID_TAG);
-                player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.book.clear")));
+                player.addChatComponentMessage(
+                        new ChatComponentText(StatCollector.translateToLocal("message.book.clear")));
                 return stack;
             }
             final String playerUUID = player.getUniqueID().toString();
             if (stackNBT.hasKey(UUID_TAG) && !stackNBT.getString(UUID_TAG).equals(playerUUID)) {
-                player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("message.book.wrongowner")));
+                player.addChatComponentMessage(
+                        new ChatComponentText(StatCollector.translateToLocal("message.book.wrongowner")));
                 return stack;
             }
             stackNBT.setString(OWNER_TAG, player.getCommandSenderName());
@@ -61,7 +64,9 @@ public class ItemEMCBook extends ItemBase {
     @SideOnly(Side.CLIENT)
     public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean par4) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey(OWNER_TAG)) {
-            list.add(StatCollector.translateToLocal("message.book.owner") + " " + stack.getTagCompound().getString(OWNER_TAG));
+            list.add(
+                    StatCollector.translateToLocal("message.book.owner") + " "
+                            + stack.getTagCompound().getString(OWNER_TAG));
         } else {
             list.add(StatCollector.translateToLocal("message.book.no_owner"));
         }

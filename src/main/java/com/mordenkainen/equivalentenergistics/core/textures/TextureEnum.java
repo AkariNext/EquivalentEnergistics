@@ -1,9 +1,9 @@
 package com.mordenkainen.equivalentenergistics.core.textures;
 
-import com.mordenkainen.equivalentenergistics.core.Reference;
-
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
+
+import com.mordenkainen.equivalentenergistics.core.Reference;
 
 public enum TextureEnum {
 
@@ -11,14 +11,18 @@ public enum TextureEnum {
     EMCBOOK(TextureType.ITEM, "EMCBook"),
     EMCCRYSTAL(TextureType.ITEM, "EMCNugget", "EMCShard", "EMCCrystal", "DenseEMCCrystal", "SuperDenseEMCCrystal"),
     EMCCRYSTALOLD(TextureType.ITEM, "EMCCrystal"),
-    EMCCELL(TextureType.ITEM, "EMCCellTier0", "EMCCellTier1", "EMCCellTier2", "EMCCellTier3", "EMCCellTier4", "EMCCellTier5", "EMCCellTier6", "EMCCellTier7"),
+    EMCCELL(TextureType.ITEM, "EMCCellTier0", "EMCCellTier1", "EMCCellTier2", "EMCCellTier3", "EMCCellTier4",
+            "EMCCellTier5", "EMCCellTier6", "EMCCellTier7"),
     EMCCELLCREATIVE(TextureType.ITEM, "EMCCellCreative"),
     MISCITEM(TextureType.ITEM, "EMCCellHousing", "EMCTotal"),
-    EMCSTORAGECOMPONENT(TextureType.ITEM, "EMCStorageComponent0", "EMCStorageComponent1", "EMCStorageComponent2", "EMCStorageComponent3", "EMCStorageComponent4", "EMCStorageComponent5", "EMCStorageComponent6", "EMCStorageComponent7"),
+    EMCSTORAGECOMPONENT(TextureType.ITEM, "EMCStorageComponent0", "EMCStorageComponent1", "EMCStorageComponent2",
+            "EMCStorageComponent3", "EMCStorageComponent4", "EMCStorageComponent5", "EMCStorageComponent6",
+            "EMCStorageComponent7"),
     EMCASSEMBLER(TextureType.BLOCK, "EMCAssemblerLights", "EMCAssemblerError"),
     EMCPROVIDER(TextureType.BLOCK, "EMCProviderLights");
 
     private enum TextureType {
+
         ITEM(1),
         BLOCK(0),
         PART(0);

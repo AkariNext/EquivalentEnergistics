@@ -5,6 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
+
 import com.mojang.authlib.GameProfile;
 import com.mordenkainen.equivalentenergistics.blocks.crafter.tiles.TileEMCCrafterBase;
 import com.mordenkainen.equivalentenergistics.integration.IEMCHandler;
@@ -22,10 +27,6 @@ import com.pahimar.ee3.util.ItemStackUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
 
 public class EquivExchange3 implements IEMCHandler {
 
@@ -51,7 +52,8 @@ public class EquivExchange3 implements IEMCHandler {
     public List<ItemStack> getTransmutations(final TileEMCCrafterBase tile) {
         List<ItemStack> transmutations;
 
-        transmutations = new ArrayList<ItemStack>(PlayerKnowledgeRegistryProxy.getKnownItemStacks(ItemStackUtils.getOwnerName(tile.getCurrentTome())));
+        transmutations = new ArrayList<ItemStack>(
+                PlayerKnowledgeRegistryProxy.getKnownItemStacks(ItemStackUtils.getOwnerName(tile.getCurrentTome())));
 
         final Iterator<ItemStack> iter = transmutations.iterator();
         while (iter.hasNext()) {
@@ -108,19 +110,23 @@ public class EquivExchange3 implements IEMCHandler {
 
     @Override
     public double getStoredEMC(final ItemStack stack) {
-        return ItemEnum.EMCCELL.isSameItem(stack) ? ((ItemEMCCell) ItemEnum.EMCCELL.getItem()).getStoredCellEMC(stack) : 0;
+        return ItemEnum.EMCCELL.isSameItem(stack) ? ((ItemEMCCell) ItemEnum.EMCCELL.getItem()).getStoredCellEMC(stack)
+                : 0;
     }
 
     @Override
     public double extractEMC(final ItemStack stack, final double toStore) {
-        return ItemEnum.EMCCELL.isSameItem(stack) ? ((ItemEMCCell) ItemEnum.EMCCELL.getItem()).extractCellEMC(stack, toStore) : 0;
+        return ItemEnum.EMCCELL.isSameItem(stack)
+                ? ((ItemEMCCell) ItemEnum.EMCCELL.getItem()).extractCellEMC(stack, toStore)
+                : 0;
     }
 
     public static void postPlayerLearn(final String player) {
         if (FMLCommonHandler.instance().getEffectiveSide().isServer() && player != null) {
             final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(player);
             if (profile != null) {
-                MinecraftForge.EVENT_BUS.post(new PlayerKnowledgeEvent.PlayerLearnKnowledgeEvent(profile.getId(), null));
+                MinecraftForge.EVENT_BUS
+                        .post(new PlayerKnowledgeEvent.PlayerLearnKnowledgeEvent(profile.getId(), null));
             }
         }
     }
@@ -129,7 +135,8 @@ public class EquivExchange3 implements IEMCHandler {
         if (FMLCommonHandler.instance().getEffectiveSide().isServer() && player != null) {
             final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(player);
             if (profile != null) {
-                MinecraftForge.EVENT_BUS.post(new PlayerKnowledgeEvent.PlayerForgetKnowledgeEvent(profile.getId(), null));
+                MinecraftForge.EVENT_BUS
+                        .post(new PlayerKnowledgeEvent.PlayerForgetKnowledgeEvent(profile.getId(), null));
             }
         }
     }

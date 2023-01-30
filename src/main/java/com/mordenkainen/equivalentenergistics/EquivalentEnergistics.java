@@ -1,5 +1,7 @@
 package com.mordenkainen.equivalentenergistics;
 
+import net.minecraft.creativetab.CreativeTabs;
+
 import org.apache.logging.log4j.Logger;
 
 import com.mordenkainen.equivalentenergistics.core.CreativeTabEE;
@@ -14,9 +16,12 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.creativetab.CreativeTabs;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = Reference.MOD_DEPENDENCIES)
+@Mod(
+        modid = Reference.MOD_ID,
+        name = Reference.MOD_NAME,
+        version = Reference.MOD_VERSION,
+        dependencies = Reference.MOD_DEPENDENCIES)
 public class EquivalentEnergistics {
 
     @Instance(Reference.MOD_ID)

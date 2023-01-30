@@ -1,5 +1,8 @@
 package com.mordenkainen.equivalentenergistics.integration;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+
 import com.google.common.base.Predicate;
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
 import com.mordenkainen.equivalentenergistics.core.config.ConfigManager;
@@ -11,14 +14,13 @@ import com.mordenkainen.equivalentenergistics.integration.waila.Waila;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 
 public final class Integration {
 
     public static IEMCHandler emcHandler;
 
     public enum Mods {
+
         WAILA("Waila"),
         NEI("NotEnoughItems", Side.CLIENT),
         EE3("EE3", "EquivalentExchange3"),
@@ -88,14 +90,17 @@ public final class Integration {
 
         public void loadConfig(final Configuration config) {
             if (usesConfig) {
-                shouldLoad = config.get("Integration", "enable" + getModName(), true, "Enable " + getModName() + " Integration.").getBoolean(true);
+                shouldLoad = config
+                        .get("Integration", "enable" + getModName(), true, "Enable " + getModName() + " Integration.")
+                        .getBoolean(true);
             } else {
                 shouldLoad = true;
             }
         }
 
         public boolean isEnabled() {
-            return (Loader.isModLoaded(getModID()) || ModAPIManager.INSTANCE.hasAPI(getModID())) && shouldLoad && correctSide();
+            return (Loader.isModLoaded(getModID()) || ModAPIManager.INSTANCE.hasAPI(getModID())) && shouldLoad
+                    && correctSide();
         }
 
         public Predicate<Mods> getTest() {

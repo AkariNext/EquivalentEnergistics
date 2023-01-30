@@ -1,13 +1,14 @@
 package com.mordenkainen.equivalentenergistics.items;
 
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
 import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
 import com.mordenkainen.equivalentenergistics.items.base.ItemMultiBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 public class ItemStorageComponent extends ItemMultiBase {
 

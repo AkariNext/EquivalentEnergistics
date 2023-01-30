@@ -1,25 +1,27 @@
 package com.mordenkainen.equivalentenergistics.blocks.base.render;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
 public class BlockWithTileRenderer implements ISimpleBlockRenderingHandler {
-    
+
     final private int renderID;
-    
+
     public BlockWithTileRenderer(final int renderID) {
         super();
         this.renderID = renderID;
     }
-    
+
     @Override
-    public void renderInventoryBlock(final Block block, final int metadata, final int modelId, final RenderBlocks renderer) {
+    public void renderInventoryBlock(final Block block, final int metadata, final int modelId,
+            final RenderBlocks renderer) {
         GL11.glPushMatrix();
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
         final TileEntity tile = block.createTileEntity(null, metadata);
@@ -29,7 +31,8 @@ public class BlockWithTileRenderer implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public boolean renderWorldBlock(final IBlockAccess world, final int x, final int y, final int z, final Block block, final int modelId, final RenderBlocks renderer) {
+    public boolean renderWorldBlock(final IBlockAccess world, final int x, final int y, final int z, final Block block,
+            final int modelId, final RenderBlocks renderer) {
         return false;
     }
 

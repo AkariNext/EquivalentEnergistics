@@ -1,14 +1,15 @@
 package com.mordenkainen.equivalentenergistics.integration.nei;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import codechicken.nei.api.API;
+import codechicken.nei.api.IConfigureNEI;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.core.Reference;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
 import com.mordenkainen.equivalentenergistics.items.ItemEnum;
-
-import codechicken.nei.api.API;
-import codechicken.nei.api.IConfigureNEI;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class NEIEquivalentEnergisticsConfig implements IConfigureNEI {
 

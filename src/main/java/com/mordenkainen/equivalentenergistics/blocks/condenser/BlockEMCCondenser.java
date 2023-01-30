@@ -2,6 +2,16 @@ package com.mordenkainen.equivalentenergistics.blocks.condenser;
 
 import java.util.Locale;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
+
 import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
 import com.mordenkainen.equivalentenergistics.blocks.base.block.BlockMultiContainerBase;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenser;
@@ -14,15 +24,6 @@ import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
 
 public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfigurable {
 
@@ -30,14 +31,14 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
     public static double emcPerTick;
     public static double idlePower;
     public static double activePower;
-    
+
     public BlockEMCCondenser() {
         super(Material.rock, 4);
         setHardness(1.5f);
         setStepSound(Block.soundTypeStone);
         setLightOpacity(1);
     }
-    
+
     @Override
     public boolean isOpaqueCube() {
         return false;
@@ -52,7 +53,7 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
     public int getRenderType() {
         return EquivalentEnergistics.proxy.condenserRenderer;
     }
-    
+
     @Override
     public TileEntity createNewTileEntity(final World world, final int meta) {
         switch (meta) {
@@ -74,7 +75,8 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
     }
 
     @Override
-    public boolean onBlockActivated(final World world, final int x, final int y, final int z, final EntityPlayer player, final int side, final float hitX, final float hitY, final float hitZ) {
+    public boolean onBlockActivated(final World world, final int x, final int y, final int z, final EntityPlayer player,
+            final int side, final float hitX, final float hitY, final float hitZ) {
         if (player == null) {
             return false;
         }
@@ -94,36 +96,36 @@ public class BlockEMCCondenser extends BlockMultiContainerBase implements IConfi
     public boolean hasComparatorInputOverride() {
         return true;
     }
-    
+
     @Override
     public int getComparatorInputOverride(final World world, final int x, final int y, final int z, final int meta) {
-        if(meta == 0) {
+        if (meta == 0) {
             return 0;
         }
-        
+
         final TileEMCCondenserAdv tile = CommonUtils.getTE(TileEMCCondenserAdv.class, world, x, y, z);
-        
+
         switch (tile.getState()) {
-        case ACTIVE:
-            return 2;
-        case IDLE:
-            return 1;
-        case NOEMCSTORAGE:
-            return 3;
-        case NOITEMSTORAGE:
-            return 4;
-        case NOPOWER:
-            return 5;
-        default:
-            return 0;
+            case ACTIVE:
+                return 2;
+            case IDLE:
+                return 1;
+            case NOEMCSTORAGE:
+                return 3;
+            case NOITEMSTORAGE:
+                return 4;
+            case NOPOWER:
+                return 5;
+            default:
+                return 0;
         }
     }
-    
+
     @Override
     public boolean canConnectRedstone(final IBlockAccess world, final int x, final int y, final int z, final int side) {
         return world.getBlockMetadata(x, y, z) != 0;
     }
-    
+
     @Override
     public void loadConfig(final Configuration config) {
         idlePower = config.get(GROUP, "IdlePowerDrain", 0.0).getDouble(0.0);

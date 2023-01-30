@@ -1,10 +1,10 @@
 package com.mordenkainen.equivalentenergistics.core;
 
-import com.mordenkainen.equivalentenergistics.items.ItemEnum;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.mordenkainen.equivalentenergistics.items.ItemEnum;
 
 public class CreativeTabEE extends CreativeTabs {
 

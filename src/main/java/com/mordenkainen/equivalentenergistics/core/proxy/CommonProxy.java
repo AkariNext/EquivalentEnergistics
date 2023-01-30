@@ -1,5 +1,7 @@
 package com.mordenkainen.equivalentenergistics.core.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import com.mordenkainen.equivalentenergistics.blocks.BlockEnum;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.tiles.TileEMCCondenserAdv;
@@ -19,7 +21,6 @@ import com.mordenkainen.equivalentenergistics.items.ItemEnum;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy {
 
@@ -78,7 +79,8 @@ public class CommonProxy {
     public void initRenderers() {}
 
     public void unmetDependency() {
-        throw new ServerUnmetDependencyException("Equivalent Energistics requires either Equivalent Exchange 3 or ProjectE to be installed and enabled!");
+        throw new ServerUnmetDependencyException(
+                "Equivalent Energistics requires either Equivalent Exchange 3 or ProjectE to be installed and enabled!");
     }
 
 }

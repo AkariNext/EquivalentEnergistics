@@ -6,15 +6,14 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-
 public abstract class EqETileBase extends TileEntity {
 
     public void onChunkLoad() {
-        if(isInvalid()) {
+        if (isInvalid()) {
             validate();
         }
     }
-    
+
     @Override
     public Packet getDescriptionPacket() {
         final NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -37,9 +36,9 @@ public abstract class EqETileBase extends TileEntity {
     }
 
     public abstract void onReady();
-    
+
     protected abstract boolean readPacketData(NBTTagCompound nbttagcompound);
-    
+
     protected abstract void getPacketData(NBTTagCompound nbttagcompound);
-    
+
 }

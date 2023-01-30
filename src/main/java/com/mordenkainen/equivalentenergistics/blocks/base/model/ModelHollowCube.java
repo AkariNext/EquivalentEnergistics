@@ -8,7 +8,7 @@ public final class ModelHollowCube extends ModelBase {
     private final ModelRenderer frame;
     private final ModelRenderer corner;
     private final ModelRenderer glass;
-    
+
     public ModelHollowCube() {
         super();
         textureWidth = 64;
@@ -32,21 +32,21 @@ public final class ModelHollowCube extends ModelBase {
 
     public void render() {
         final float scale = 1F / 16F;
-        for (final float f1 : new float[] {0.0F, 1.5707963267948966F, 3.141592653589793F}) {
-            for (final float f2 : new float[] {0.0F, 1.5707963267948966F, 3.141592653589793F, 4.7123889803846898F}) {
+        for (final float f1 : new float[] { 0.0F, 1.5707963267948966F, 3.141592653589793F }) {
+            for (final float f2 : new float[] { 0.0F, 1.5707963267948966F, 3.141592653589793F, 4.7123889803846898F }) {
                 setRotateAngle(frame, f1, f2, 0.0F);
                 frame.render(scale);
             }
         }
-        
-        for (final float f1 : new float[] {0.0F, 1.5707963267948966F}) {
-            for (final float f2 : new float[] {0.0F, 1.5707963267948966F, 3.141592653589793F, 4.7123889803846898F}) {
+
+        for (final float f1 : new float[] { 0.0F, 1.5707963267948966F }) {
+            for (final float f2 : new float[] { 0.0F, 1.5707963267948966F, 3.141592653589793F, 4.7123889803846898F }) {
                 setRotateAngle(corner, f1, f2, 0.0F);
                 corner.render(scale);
             }
         }
-        
-        for (final float f1 : new float[] {0.0F, 1.5707963267948966F, 3.141592653589793F, 4.7123889803846898F}) {
+
+        for (final float f1 : new float[] { 0.0F, 1.5707963267948966F, 3.141592653589793F, 4.7123889803846898F }) {
             setRotateAngle(glass, 0.0F, f1, 0.0F);
             glass.render(scale);
         }

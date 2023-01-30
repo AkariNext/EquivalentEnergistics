@@ -1,21 +1,23 @@
 package com.mordenkainen.equivalentenergistics.items;
 
-import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
-import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
-import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
-import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCellCreative;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.config.Configuration;
 
 import appeng.api.storage.IMEInventory;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.StorageChannel;
+
+import com.mordenkainen.equivalentenergistics.EquivalentEnergistics;
+import com.mordenkainen.equivalentenergistics.core.config.IConfigurable;
+import com.mordenkainen.equivalentenergistics.core.textures.TextureEnum;
+import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCellCreative;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.config.Configuration;
 
 public class ItemEMCCellCreative extends ItemEMCCellBase implements IConfigurable {
 
@@ -41,7 +43,8 @@ public class ItemEMCCellCreative extends ItemEMCCellBase implements IConfigurabl
     @Optional.Method(modid = "appliedenergistics2")
     @SuppressWarnings("rawtypes")
     @Override
-    public IMEInventoryHandler getCellInventory(final ItemStack stack, final ISaveProvider host, final StorageChannel channel) {
+    public IMEInventoryHandler getCellInventory(final ItemStack stack, final ISaveProvider host,
+            final StorageChannel channel) {
         if (channel == StorageChannel.ITEMS && isCell(stack)) {
             return new HandlerEMCCellCreative(host);
         }
@@ -65,9 +68,11 @@ public class ItemEMCCellCreative extends ItemEMCCellBase implements IConfigurabl
     @Override
     public void loadConfig(final Configuration config) {
         try {
-            capacity = Double.valueOf(config.get(GROUP, "Creative_Capacity", String.format("%.0f", capacity)).getString());
+            capacity = Double
+                    .valueOf(config.get(GROUP, "Creative_Capacity", String.format("%.0f", capacity)).getString());
         } catch (final NumberFormatException e) {
-            EquivalentEnergistics.logger.warn("Creative Storage Cell Creative_Capacity configured for invalid value! Default will be used!");
+            EquivalentEnergistics.logger.warn(
+                    "Creative Storage Cell Creative_Capacity configured for invalid value! Default will be used!");
         }
     }
 

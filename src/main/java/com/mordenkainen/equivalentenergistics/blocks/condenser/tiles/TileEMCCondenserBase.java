@@ -3,6 +3,17 @@ package com.mordenkainen.equivalentenergistics.blocks.condenser.tiles;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import appeng.api.config.Actionable;
+import appeng.api.config.PowerMultiplier;
+import appeng.api.networking.GridFlags;
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.ticking.IGridTickable;
+import appeng.api.networking.ticking.TickRateModulation;
+import appeng.api.networking.ticking.TickingRequest;
+
 import com.mordenkainen.equivalentenergistics.blocks.condenser.BlockEMCCondenser;
 import com.mordenkainen.equivalentenergistics.blocks.condenser.CondenserState;
 import com.mordenkainen.equivalentenergistics.integration.Integration;
@@ -14,23 +25,13 @@ import com.mordenkainen.equivalentenergistics.items.ItemEnum;
 import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 import com.mordenkainen.equivalentenergistics.util.inventory.InternalInventory;
 
-import appeng.api.config.Actionable;
-import appeng.api.config.PowerMultiplier;
-import appeng.api.networking.GridFlags;
-import appeng.api.networking.IGridNode;
-import appeng.api.networking.ticking.IGridTickable;
-import appeng.api.networking.ticking.TickRateModulation;
-import appeng.api.networking.ticking.TickingRequest;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTickable {
 
     private final static String STATE_TAG = "state";
 
     protected CondenserState state = CondenserState.IDLE;
     private int updateCounter = 19;
-    
+
     public TileEMCCondenserBase(final ItemStack repItem) {
         super(repItem);
         internalInventory = new CondenserInventory();
@@ -56,7 +57,7 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
             state = newState;
             flag = true;
         }
-        if(nbttagcompound.hasKey(INVENTORY_TAG)) {
+        if (nbttagcompound.hasKey(INVENTORY_TAG)) {
             internalInventory.loadFromNBT(nbttagcompound, INVENTORY_TAG);
             flag = true;
         }
@@ -74,14 +75,14 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
         if (refreshNetworkState() || updateCounter == 20) {
             markForUpdate();
         }
-            
+
         final TickRateModulation result = tickingRequest();
-        if(result != null) {
+        if (result != null) {
             return result;
         }
-        
+
         CondenserState newState = state;
-        
+
         if (!isActive() || getInventory().isEmpty()) {
             updateState(CondenserState.IDLE);
         } else {
@@ -91,7 +92,7 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
 
         return state.getTickRate();
     }
-    
+
     protected abstract TickRateModulation tickingRequest();
 
     protected abstract double getEMCPerTick();
@@ -103,7 +104,8 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
     protected int getMaxItemsForPower(final int stackSize, final double emcValue) {
         final double powerPerItem = emcValue * BlockEMCCondenser.activePower;
         final double powerRequired = stackSize * powerPerItem;
-        final double powerAvail = GridUtils.extractAEPower(getProxy(), powerRequired, Actionable.SIMULATE, PowerMultiplier.CONFIG);
+        final double powerAvail = GridUtils
+                .extractAEPower(getProxy(), powerRequired, Actionable.SIMULATE, PowerMultiplier.CONFIG);
         return (int) (powerAvail / powerPerItem);
     }
 
@@ -122,7 +124,8 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
                 return remainingEMC;
             }
 
-            int maxToDo = Math.min(stack.stackSize, Math.min((int) (availEMC / itemEMC), (int) (remainingEMC / itemEMC)));
+            int maxToDo = Math
+                    .min(stack.stackSize, Math.min((int) (availEMC / itemEMC), (int) (remainingEMC / itemEMC)));
             if (usePower) {
                 maxToDo = Math.min(getMaxItemsForPower(maxToDo, itemEMC), maxToDo);
             }
@@ -133,7 +136,11 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
 
             final double toStore = itemEMC * maxToDo;
             if (usePower) {
-                GridUtils.extractAEPower(getProxy(), toStore * BlockEMCCondenser.activePower, Actionable.MODULATE, PowerMultiplier.CONFIG);
+                GridUtils.extractAEPower(
+                        getProxy(),
+                        toStore * BlockEMCCondenser.activePower,
+                        Actionable.MODULATE,
+                        PowerMultiplier.CONFIG);
             }
             emcGrid.addEMC(toStore, Actionable.MODULATE);
             stack.stackSize -= maxToDo;
@@ -197,7 +204,7 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
                 }
             }
         }
-        
+
         switch ((int) remainingEMC) {
             case -1:
                 return CondenserState.NOEMCSTORAGE;
@@ -222,7 +229,7 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
     protected ItemStack ejectItem(final ItemStack stack) {
         return GridUtils.injectItemsForPower(getProxy(), stack, mySource);
     }
-    
+
     protected class CondenserInventory extends InternalInventory {
 
         CondenserInventory() {
@@ -231,9 +238,10 @@ public abstract class TileEMCCondenserBase extends TileAEInv implements IGridTic
 
         @Override
         public boolean isItemValidForSlot(final int slotId, final ItemStack itemStack) {
-            return Integration.emcHandler.isEMCStorage(itemStack) || Integration.emcHandler.hasEMC(itemStack) && Integration.emcHandler.getSingleEnergyValue(itemStack) <= getEMCPerTick();
+            return Integration.emcHandler.isEMCStorage(itemStack) || Integration.emcHandler.hasEMC(itemStack)
+                    && Integration.emcHandler.getSingleEnergyValue(itemStack) <= getEMCPerTick();
         }
-        
+
     }
 
     public List<ItemStack> getDisplayStacks() {

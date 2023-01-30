@@ -4,9 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCellBase;
-import com.mordenkainen.equivalentenergistics.util.CommonUtils;
-
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGridHost;
 import appeng.api.networking.IGridNode;
@@ -15,6 +12,9 @@ import appeng.api.storage.ICellProvider;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAEItemStack;
+
+import com.mordenkainen.equivalentenergistics.integration.ae2.cells.HandlerEMCCellBase;
+import com.mordenkainen.equivalentenergistics.util.CommonUtils;
 
 public class EMCGridCellHandler {
 
@@ -138,7 +138,8 @@ public class EMCGridCellHandler {
             if ("DriveWatcher".equals(className)) {
                 realHandler = (IMEInventoryHandler<IAEItemStack>) intHandler.get(cell);
             } else if ("ChestMonitorHandler".equals(className)) {
-                final IMEInventoryHandler<IAEItemStack> monHandler = (IMEInventoryHandler<IAEItemStack>) extHandler.get(cell);
+                final IMEInventoryHandler<IAEItemStack> monHandler = (IMEInventoryHandler<IAEItemStack>) extHandler
+                        .get(cell);
                 realHandler = (IMEInventoryHandler<IAEItemStack>) intHandler.get(monHandler);
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
@@ -151,7 +152,7 @@ public class EMCGridCellHandler {
 
         return null;
     }
-    
+
     private void updatePool(final double newMax, final double newCurrent) {
         if (newMax != hostGrid.getMaxEMC() || newCurrent != hostGrid.getCurrentEMC()) {
             hostGrid.setMaxEMC(newMax);

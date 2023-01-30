@@ -1,26 +1,27 @@
 package com.mordenkainen.equivalentenergistics.integration.ae2.tiles;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import appeng.api.config.SecurityPermissions;
+import appeng.api.networking.security.ISecurityGrid;
+import appeng.api.networking.security.MachineSource;
+import appeng.api.util.DimensionalCoord;
+
 import com.mordenkainen.equivalentenergistics.blocks.base.tile.EqETileBase;
 import com.mordenkainen.equivalentenergistics.integration.ae2.grid.AEProxy;
 import com.mordenkainen.equivalentenergistics.integration.ae2.grid.GridAccessException;
 import com.mordenkainen.equivalentenergistics.integration.ae2.grid.GridUtils;
 import com.mordenkainen.equivalentenergistics.integration.ae2.grid.IAEProxyHost;
 import com.mordenkainen.equivalentenergistics.util.CommonUtils;
-
-import appeng.api.config.SecurityPermissions;
-import appeng.api.networking.security.ISecurityGrid;
-import appeng.api.networking.security.MachineSource;
-import appeng.api.util.DimensionalCoord;
 import cpw.mods.fml.common.FMLCommonHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class TileAEBase extends EqETileBase implements IAEProxyHost {
 
     private final static String POWERED_TAG = "powered";
     private final static String ACTIVE_TAG = "active";
-    
+
     protected final AEProxy gridProxy;
     protected MachineSource mySource;
     protected boolean active;
@@ -49,7 +50,7 @@ public abstract class TileAEBase extends EqETileBase implements IAEProxyHost {
         super.validate();
         IAEProxyHost.super.validate();
     }
-    
+
     @Override
     public void onReady() {
         IAEProxyHost.super.onReady();
@@ -81,18 +82,20 @@ public abstract class TileAEBase extends EqETileBase implements IAEProxyHost {
     public void securityBreak() {
         CommonUtils.destroyAndDrop(worldObj, xCoord, yCoord, zCoord);
     }
-    
+
     protected boolean checkPermissions(final EntityPlayer player) {
         try {
             final ISecurityGrid sGrid = GridUtils.getSecurity(getProxy());
 
-            return sGrid.hasPermission(player, SecurityPermissions.INJECT) && sGrid.hasPermission(player, SecurityPermissions.EXTRACT) && sGrid.hasPermission(player, SecurityPermissions.BUILD);
+            return sGrid.hasPermission(player, SecurityPermissions.INJECT)
+                    && sGrid.hasPermission(player, SecurityPermissions.EXTRACT)
+                    && sGrid.hasPermission(player, SecurityPermissions.BUILD);
         } catch (final GridAccessException e) {
             CommonUtils.debugLog("TileAEBase:checkPermissions: Error accessing grid:", e);
         }
         return true;
     }
-    
+
     @Override
     public boolean isActive() {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
@@ -101,7 +104,7 @@ public abstract class TileAEBase extends EqETileBase implements IAEProxyHost {
             return gridProxy.isReady() && gridProxy.isActive();
         }
     }
-    
+
     @Override
     public boolean isPowered() {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
@@ -116,36 +119,36 @@ public abstract class TileAEBase extends EqETileBase implements IAEProxyHost {
         nbttagcompound.setBoolean(POWERED_TAG, isPowered());
         nbttagcompound.setBoolean(ACTIVE_TAG, isActive());
     }
-    
+
     @Override
     protected boolean readPacketData(final NBTTagCompound nbttagcompound) {
         boolean flag = false;
         boolean newState = nbttagcompound.getBoolean(POWERED_TAG);
-        if(newState != powered) {
+        if (newState != powered) {
             powered = newState;
             flag = true;
         }
         newState = nbttagcompound.getBoolean(ACTIVE_TAG);
-        if(newState != active) {
+        if (newState != active) {
             active = newState;
             flag = true;
         }
         return flag;
     }
-    
+
     protected boolean refreshNetworkState() {
         boolean flag = false;
         boolean newState = isPowered();
-        if(newState != powered) {
+        if (newState != powered) {
             powered = newState;
             flag = true;
         }
         newState = isActive();
-        if(newState != active) {
+        if (newState != active) {
             active = newState;
             flag = true;
         }
         return flag;
     }
-    
+
 }

@@ -3,19 +3,20 @@ package com.mordenkainen.equivalentenergistics.blocks.crafter.tiles;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mordenkainen.equivalentenergistics.integration.ae2.grid.AEProxy;
-import com.mordenkainen.equivalentenergistics.items.ItemEnum;
-
-import appeng.api.networking.security.MachineSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import appeng.api.networking.security.MachineSource;
+
+import com.mordenkainen.equivalentenergistics.integration.ae2.grid.AEProxy;
+import com.mordenkainen.equivalentenergistics.items.ItemEnum;
 
 public class CraftingManager {
 
     private static final String TICK_TAG = "RemainingTicks";
     private static final String POWER_TAG = "PowerPerTick";
     private static final String JOB_TAG = "Job";
-    
+
     private final double craftingTime;
     private final int maxJobs;
     private final ICraftingMonitor monitor;
@@ -23,7 +24,8 @@ public class CraftingManager {
     private final AEProxy proxy;
     private final MachineSource source;
 
-    public CraftingManager(final double craftingTime, final int maxJobs, final ICraftingMonitor monitor, final AEProxy proxy, final MachineSource source) {
+    public CraftingManager(final double craftingTime, final int maxJobs, final ICraftingMonitor monitor,
+            final AEProxy proxy, final MachineSource source) {
         super();
         this.craftingTime = craftingTime;
         this.maxJobs = maxJobs;
@@ -34,7 +36,7 @@ public class CraftingManager {
     }
 
     public boolean isBusy() {
-        for (int i = 0; i < maxJobs; i ++) {
+        for (int i = 0; i < maxJobs; i++) {
             if (jobs[i] == null) {
                 return false;
             }
@@ -43,7 +45,7 @@ public class CraftingManager {
     }
 
     public boolean isCrafting() {
-        for (int i = 0; i < maxJobs; i ++) {
+        for (int i = 0; i < maxJobs; i++) {
             if (jobs[i] != null) {
                 return true;
             }
@@ -55,7 +57,12 @@ public class CraftingManager {
         if (!isBusy()) {
             for (int i = 0; i < maxJobs; i++) {
                 if (jobs[i] == null) {
-                    jobs[i] = new CraftingJob(ItemEnum.isCrystal(outputStack) ? 0 : craftingTime, outputStack, (emc / craftingTime) * powerPerEMC, proxy, source);
+                    jobs[i] = new CraftingJob(
+                            ItemEnum.isCrystal(outputStack) ? 0 : craftingTime,
+                            outputStack,
+                            (emc / craftingTime) * powerPerEMC,
+                            proxy,
+                            source);
                     return true;
                 }
             }
@@ -64,7 +71,7 @@ public class CraftingManager {
     }
 
     public boolean craftingTick() {
-        for (int i = 0; i < maxJobs; i ++) {
+        for (int i = 0; i < maxJobs; i++) {
             if (jobs[i] != null) {
                 if (!jobs[i].craftingTick()) {
                     return false;
@@ -109,7 +116,12 @@ public class CraftingManager {
         for (int i = 0; i < maxJobs; i++) {
             if (tag.hasKey(JOB_TAG + i)) {
                 final ItemStack outputStack = ItemStack.loadItemStackFromNBT((NBTTagCompound) tag.getTag(JOB_TAG + i));
-                jobs[i] = new CraftingJob(ItemEnum.isCrystal(outputStack) ? 0 : tag.getDouble(TICK_TAG), outputStack, tag.getDouble(POWER_TAG), proxy, source);
+                jobs[i] = new CraftingJob(
+                        ItemEnum.isCrystal(outputStack) ? 0 : tag.getDouble(TICK_TAG),
+                        outputStack,
+                        tag.getDouble(POWER_TAG),
+                        proxy,
+                        source);
             } else {
                 jobs[i] = null;
             }
